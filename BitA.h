@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <fstream>
 
 class Mark
 {
@@ -21,7 +22,7 @@ class BitA
 public:
 
 	std::string name;
-	std::string path;
+	std::wstring path;
 
 	int size_x;
 	int size_y;
@@ -30,7 +31,11 @@ public:
 
 	void populate(int znak, short color);
 
-	BitA( unsigned int sizeX, unsigned int sizeY );
+	bool save();
+	bool load(std::wstring path, unsigned int sizeX, unsigned int sizeY);
+
+	BitA(std::wstring name_path, unsigned int sizeX, unsigned int sizeY );
+	BitA();
 	~BitA();
 };
 

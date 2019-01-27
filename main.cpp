@@ -1,23 +1,23 @@
 #include <iostream>
+#include <locale>
+#include <codecvt>
 
 #include "Application.h"
 
-int main()
+int main(int argc, char * argv[])
 {
 	Application app;
+	app.drawLaout();
+	app.toolManadger.draw();
 
-	BitA bigBoy(173,200);
-	
-	bigBoy.populate(0x25bc, 2);
-	bigBoy.path = "big.bitA";
-	
-	app.activeFile = &bigBoy;
-	app.saveBitA();
-	
+	if (argc > 1)
+	{
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		std::wstring d = converter.from_bytes(argv[1]);
+		app.loadBitA(d);
+	}
+
 	app.run();
 
-	int x;
-	std::cin >> x;
-	//app.activeFile->marks[0][0].color = x;
-	//app.saveBitA();
+	return 0;
 }

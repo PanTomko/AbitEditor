@@ -21,6 +21,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{171c9609-b776-484a-9883-f70c778b22b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Commands\src">
+      <UniqueIdentifier>{ea248882-75a7-49a9-9b13-b1b21a06e384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Commands\include">
+      <UniqueIdentifier>{81b50436-d9d5-44cd-9754-3a88aa3d3055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{b15364f9-9936-4b7b-a96b-7c42f0b42462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\src">
+      <UniqueIdentifier>{a0f6cd51-fb14-4f26-94e0-e1b1c9d94dbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\include">
+      <UniqueIdentifier>{655ba6e8-d5ae-4c35-997e-515d192bd3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ToolOptions">
+      <UniqueIdentifier>{4cba8cd3-e58f-4e75-b068-c8fe7ef5635a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ToolOptions\include">
+      <UniqueIdentifier>{0595c5c9-3db8-4362-b508-b540668f155c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ToolOptions\src">
+      <UniqueIdentifier>{ba165f84-f6f8-4792-8a70-4866a82686f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitA.cpp">
@@ -29,11 +56,44 @@
     <ClCompile Include="Application.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Vector2D.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolsManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandLine.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Command_Save.cpp">
+      <Filter>Commands\src</Filter>
+    </ClCompile>
+    <ClCompile Include="Command_SaveAs.cpp">
+      <Filter>Commands\src</Filter>
+    </ClCompile>
+    <ClCompile Include="Command_Load.cpp">
+      <Filter>Commands\src</Filter>
+    </ClCompile>
+    <ClCompile Include="Command_NewFile.cpp">
+      <Filter>Commands\src</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolOption.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Brush.cpp">
+      <Filter>Tools\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolOptionColor.cpp">
+      <Filter>ToolOptions\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +105,39 @@
     </ClInclude>
     <ClInclude Include="Vector2D.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolsManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Command_Save.h">
+      <Filter>Commands\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Command_SaveAs.h">
+      <Filter>Commands\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Command_Load.h">
+      <Filter>Commands\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Command_NewFile.h">
+      <Filter>Commands\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Brush.h">
+      <Filter>Tools\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolOption.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolOptionColor.h">
+      <Filter>ToolOptions\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

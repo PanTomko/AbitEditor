@@ -14,24 +14,14 @@
 // math stuff | floor/ceil
 #include <math.h>
 
-// TODO :
-/*
-[x] determin size of render for too big/small .bitA
+// Thread C++ 14
+#include <thread>
+#include <chrono>
+#include <Winuser.h>
 
-[x] determin where to draw it
+#define WM_COMPLETE (WM_USER + 0)
 
-[x] draw mark.chars
-
-[x] create make .bitA file
-
-[ ] add some sort of border or color to distingushe canvas
-
-[x] test difrent size displayes
-
-[x] draw mark.color note. not sure how often we need to do that
-but if dont is anyway i can stop worring about asynk
-
-*/
+using namespace std::chrono_literals;
 
 Application::Application()
 {
@@ -39,6 +29,12 @@ Application::Application()
 	consoleInput = GetStdHandle(STD_INPUT_HANDLE);
 
 	SetConsoleTitle("BitA Editor");
+	window = FindWindow(NULL, "BitA Editor");
+
+	DragAcceptFiles(
+		window,
+		TRUE
+	);
 
 	windowSize = new SMALL_RECT{ 0 , 0 , 120 , 30 };
 
@@ -49,9 +45,9 @@ Application::Application()
 	_setmode(_fileno(stdout), _O_U16TEXT);
 
 	layout.append(L"╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-	layout.append(L"║                                                     Menu                                                             ║");
+	layout.append(L"║                                                                                                                      ║");
 	layout.append(L"╠════════════════════════════════════════════════════════════════════════════════╦═════════════════════════════════════╣");
-	layout.append(L"║                                                                                ║            nav                      ║");
+	layout.append(L"║                                                                                ║                                     ║");
 	layout.append(L"║                                                                                ╠═════════════════════════════════════╣");
 	layout.append(L"║                                                                                ║                                     ║");
 	layout.append(L"║                                                                                ║                                     ║");
@@ -79,6 +75,11 @@ Application::Application()
 	layout.append(L"║ >                                                                                                                    ║");
 	layout.append(L"╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
 
+	activeFile = nullptr;
+
+	comandLine.app = this;
+	toolManadger.app = this;
+
 	running = true;
 }
 
@@ -89,44 +90,65 @@ Application::~Application()
 
 void Application::run()
 {
-	drawLaout();
+	
 
 	while (running)
 	{
 		// update / event
 		update();
 
+		
 		// draw canvas
 		drawCanvas();
-
+		toolManadger.draw();
+		comandLine.draw(consoleOutput);
+		
 		// Delay
-		Sleep(1000/60);
+		//Sleep((1000 / 60));
+		std::this_thread::sleep_for(16ms);
 	}
 }
 
 void Application::update()
 {
+	//WPARAM wParm;
+	//PostMessageW(window, WM_COMPLETE, 0, 0);
 	PeekConsoleInputW(
 		consoleInput,
 		inputBuffer,
-		1,
+		256,
 		&ic);
+
+	FlushConsoleInputBuffer(consoleInput);
 
 	for (int i = 0; i < ic; i++)
 	{
+		toolManadger.update(inputBuffer[i]);
+
+		
+
+
+
 		switch (inputBuffer[i].EventType)
 		{
 			case MOUSE_EVENT:
-				std::wcout << " Mouse " ;
+				//std::wcout << " Mouse " ;
 				break;
 
-			default:
-				std::wcout << "       " ;
+			case KEY_EVENT:
+				comandLine.update(inputBuffer[i].Event.KeyEvent);
+				break;
+
+			
+
+			default :
 				break;
 		}
 	}
 
-	FlushConsoleInputBuffer(consoleInput);
+	//ConsoleInput
+	
+	ic = 0;
 }
 
 void Application::drawLaout()
@@ -138,6 +160,8 @@ void Application::drawLaout()
 		{0,0},
 		&d);
 
+	WORD tmp = 15;
+
 	SetConsoleCursorPosition(consoleOutput, { 3, 28} );
 
 	d = 0;
@@ -148,8 +172,9 @@ void Application::drawCanvas()
 	// max drawable size x = 80 y = 30 - 6 = 24
 	// starting pos x = 4 y = 2
 	
-	Vector2D maxDraw;
-	Vector2D drawingPos{ 2, 4 };
+	if (activeFile == nullptr) return;
+
+	drawingPos = { 2, 4 };
 
 	if (activeFile->size_x >= 78) maxDraw.x = 78; 
 	else
@@ -164,7 +189,6 @@ void Application::drawCanvas()
 	{
 		maxDraw.y = activeFile->size_y;
 		drawingPos.y = static_cast<int>(std::ceil( ( 26/2 ) - ( maxDraw.y/2) )) + 2;
-		std::wcout << drawingPos.y;
 	}
 
 	WORD tmp = 0;
@@ -194,11 +218,89 @@ void Application::drawCanvas()
 		}
 	}
 
-	SetConsoleCursorPosition(consoleOutput, { 3, 28 });
+	tmp = 15;
+
+	for (int x = 0; x < maxDraw.x; x++)
+	{
+		wchar_t dd = L'·';
+
+		pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y - 1) };
+		// output char
+		WriteConsoleOutputCharacterW(
+			consoleOutput,
+			&dd,
+			1,
+			pos,
+			&d);
+
+		// Add color
+		WriteConsoleOutputAttribute(
+			consoleOutput,
+			&tmp,
+			1,
+			pos,
+			&d);
+
+		pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y + maxDraw.y) };
+		// output char
+		WriteConsoleOutputCharacterW(
+			consoleOutput,
+			&dd,
+			1,
+			pos,
+			&d);
+
+		// Add color
+		WriteConsoleOutputAttribute(
+			consoleOutput,
+			&tmp,
+			1,
+			pos,
+			&d);
+	}
+
+	for (int y = 0; y < maxDraw.y; y++)
+	{
+		wchar_t dd = L'·';
+
+		pos = COORD{ static_cast<short>(drawingPos.x - 1), static_cast<short>(drawingPos.y + y ) };
+		// output char
+		WriteConsoleOutputCharacterW(
+			consoleOutput,
+			&dd,
+			1,
+			pos,
+			&d);
+
+		// Add color
+		WriteConsoleOutputAttribute(
+			consoleOutput,
+			&tmp,
+			1,
+			pos,
+			&d);
+
+		pos = COORD{ static_cast<short>(drawingPos.x + maxDraw.x), static_cast<short>(drawingPos.y + y) };
+		// output char
+		WriteConsoleOutputCharacterW(
+			consoleOutput,
+			&dd,
+			1,
+			pos,
+			&d);
+
+		// Add color
+		WriteConsoleOutputAttribute(
+			consoleOutput,
+			&tmp,
+			1,
+			pos,
+			&d);
+	}
 	
 }
 
-bool Application::loadBitA(std::string path)
+bool Application::loadBitA(std::wstring path)
 {
 	BitA * bitAFile;
 
@@ -206,12 +308,14 @@ bool Application::loadBitA(std::string path)
 
 	std::fstream file(path);
 
+	if(!file.good())
+		std::wcout << "HMM" << std::endl;
+
 	// load size
 	int sizeX, sizeY;
 	file >> sizeX >> sizeY;
 
-	bitAFile = new BitA(sizeX, sizeY);
-	bitAFile->path = path;
+	bitAFile = new BitA(path, sizeX, sizeY);
 	activeFile = bitAFile;
 
 	int color;
@@ -234,6 +338,7 @@ bool Application::loadBitA(std::string path)
 	return false;
 }
 
+
 bool Application::saveBitA()
 {
 	std::fstream file(activeFile->path, std::ios::in | std::ios::out | std::ios::trunc); // open and delete text form file
@@ -254,4 +359,20 @@ bool Application::saveBitA()
 	file.close();
 
 	return false;
+}
+
+bool Application::isMouseOnCanvas( COORD & mouse_position)
+{
+	// Testing X
+	if (mouse_position.X >= drawingPos.x && mouse_position.X < drawingPos.x + maxDraw.x){
+	}
+	else return false;
+
+	// Testing Y
+	if (mouse_position.Y >= drawingPos.y && mouse_position.Y < drawingPos.y + maxDraw.y){
+	}
+	else return false;
+
+
+	return true;
 }
