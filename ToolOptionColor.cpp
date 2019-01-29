@@ -28,9 +28,18 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 		if (mouse.X >= 84 && mouse.X <= 116 && mouse.Y >= 5 && mouse.Y <= 19)
 		{
 			WORD tmp_color;
+			HANDLE real;
+			if (toolManager->app->consoleOutput == &toolManager->app->consoleOutputBufforOne)
+			{
+				real = toolManager->app->consoleOutputBufforTwo;
+			}
+			else
+			{
+				real = toolManager->app->consoleOutputBufforOne;
+			}
 
 			ReadConsoleOutputAttribute(
-				toolManager->app->consoleOutput,
+				real,
 				&tmp_color,
 				1,
 				mouse,
@@ -44,7 +53,7 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 	}
 }
 
-void ToolOptionColor::draw(HANDLE & consoloeOutput)
+void ToolOptionColor::draw(HANDLE * consoleOutput)
 {
 	// add 83 to get start pos
 	COORD startPos = { 84, 5 };
@@ -65,14 +74,14 @@ void ToolOptionColor::draw(HANDLE & consoloeOutput)
 				space = 0;
 
 			WriteConsoleOutputCharacterW(
-				consoloeOutput,
+				*consoleOutput,
 				show_znak,
 				1,
 				{ startPos.X + x + space, startPos.Y + y },
 				&writen);
 
 			WriteConsoleOutputAttribute(
-				consoloeOutput,
+				*consoleOutput,
 				&color,
 				1,
 				{ startPos.X + x + space, startPos.Y + y },
@@ -88,14 +97,14 @@ void ToolOptionColor::draw(HANDLE & consoloeOutput)
 		{
 
 			WriteConsoleOutputCharacterW(
-				consoloeOutput,
+				*consoleOutput,
 				znak != nullptr ? znak : &default_znak,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);
 
 			WriteConsoleOutputAttribute(
-				consoloeOutput,
+				*consoleOutput,
 				&picked_color,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },

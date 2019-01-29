@@ -7,7 +7,6 @@
 // file / io 
 #include <fstream> 
 #include <iostream>
-
 #include <wchar.h>
 #include <math.h>
 
@@ -25,9 +24,34 @@ using namespace std::chrono_literals;
 
 Application::Application()
 {
-	consoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-	consoleInput = GetStdHandle(STD_INPUT_HANDLE);
+	// Buffor
+	consoleOutputBufforOne = GetStdHandle(STD_OUTPUT_HANDLE);
+	consoleOutputBufforTwo = CreateConsoleScreenBuffer(
+		GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ | FILE_SHARE_WRITE,
+		NULL,
+		CONSOLE_TEXTMODE_BUFFER,
+		NULL
+	);
 
+	windowSize = new SMALL_RECT{ 0 , 0 , 120 , 30 };
+
+	SetConsoleScreenBufferSize(consoleOutputBufforOne, { 120,30 });
+	SetConsoleWindowInfo(consoleOutputBufforOne, TRUE, windowSize);
+
+	SetConsoleScreenBufferSize(consoleOutputBufforTwo, { 120,30 });
+	SetConsoleWindowInfo(consoleOutputBufforTwo, TRUE, windowSize);
+
+	SetConsoleActiveScreenBuffer(consoleOutputBufforOne);	// Making buffor active
+	consoleOutput = &consoleOutputBufforTwo;				// Active buffor
+
+	// Input
+	consoleInput = GetStdHandle(STD_INPUT_HANDLE);
+	SetConsoleMode(consoleInput, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+	SetConsoleMode(consoleOutputBufforTwo, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+	
+	// Window related
+	_setmode(_fileno(stdout), _O_U16TEXT);
 	SetConsoleTitle("BitA Editor");
 	window = FindWindow(NULL, "BitA Editor");
 
@@ -35,14 +59,6 @@ Application::Application()
 		window,
 		TRUE
 	);
-
-	windowSize = new SMALL_RECT{ 0 , 0 , 120 , 30 };
-
-	SetConsoleScreenBufferSize(consoleOutput, { 120,30 });
-	SetConsoleWindowInfo(consoleOutput, TRUE, windowSize);
-	SetConsoleMode(consoleInput, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
-
-	_setmode(_fileno(stdout), _O_U16TEXT);
 
 	layout.append(L"╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
 	layout.append(L"║                                                                                                                      ║");
@@ -85,86 +101,117 @@ Application::Application()
 
 Application::~Application()
 {
-	delete activeFile; // free file
+	delete activeFile;
 }
 
 void Application::run()
 {
-	
-
 	while (running)
 	{
-		// update / event
+		//std::this_thread::sleep_for(16ms);
+		Sleep(16);
 		update();
-
-		
-		// draw canvas
-		drawCanvas();
-		toolManadger.draw();
-		comandLine.draw(consoleOutput);
-		
-		// Delay
-		//Sleep((1000 / 60));
-		std::this_thread::sleep_for(16ms);
+		clean();
+		draw();
 	}
 }
 
 void Application::update()
 {
-	//WPARAM wParm;
-	//PostMessageW(window, WM_COMPLETE, 0, 0);
 	PeekConsoleInputW(
 		consoleInput,
 		inputBuffer,
-		256,
+		1024,
 		&ic);
-
-	FlushConsoleInputBuffer(consoleInput);
 
 	for (int i = 0; i < ic; i++)
 	{
 		toolManadger.update(inputBuffer[i]);
 
-		
-
-
-
-		switch (inputBuffer[i].EventType)
-		{
+		switch (inputBuffer[i].EventType){
 			case MOUSE_EVENT:
-				//std::wcout << " Mouse " ;
 				break;
 
 			case KEY_EVENT:
 				comandLine.update(inputBuffer[i].Event.KeyEvent);
 				break;
 
-			
-
-			default :
+			default:
 				break;
 		}
 	}
-
-	//ConsoleInput
-	
+	FlushConsoleInputBuffer(consoleInput);
 	ic = 0;
+}
+
+void Application::draw()
+{
+	drawLaout();
+	drawCanvas();
+	toolManadger.draw();
+	comandLine.draw(*consoleOutput);
+}
+
+void Application::clean()
+{
+	CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+	DWORD cellsToWrite;
+	DWORD writenChars;
+	DWORD writenAtributes;
+	WORD clean_color = 15;
+	COORD homeCoorde = { 0, 0 };
+
+	// Swaping active screen buffor with buffor we gonna draw to
+	
+	if (consoleOutput == &consoleOutputBufforOne)
+	{
+		consoleOutput = &consoleOutputBufforTwo;
+		SetConsoleActiveScreenBuffer(consoleOutputBufforOne);
+	}
+	else
+	{
+		consoleOutput = &consoleOutputBufforOne;
+		SetConsoleActiveScreenBuffer(consoleOutputBufforTwo);
+	}
+		
+
+	
+	// Get info of buffer we need to clean
+	if (!GetConsoleScreenBufferInfo(*consoleOutput, &bufferInfo)){
+		return;
+	}
+
+	cellsToWrite = bufferInfo.dwSize.X * bufferInfo.dwSize.Y;
+
+	FillConsoleOutputCharacterW(
+		*consoleOutput,
+		L'x',
+		cellsToWrite,
+		homeCoorde,
+		&writenChars
+	);
+
+	FillConsoleOutputAttribute(
+		*consoleOutput,
+		clean_color,
+		cellsToWrite,
+		homeCoorde,
+		&writenAtributes
+	);
+	//SetConsoleCursorPosition(*consoleOutput, homeCoorde);
+	
 }
 
 void Application::drawLaout()
 {
 	WriteConsoleOutputCharacterW(
-		consoleOutput,
+		*consoleOutput,
 		layout.c_str(),
 		120*30,
 		{0,0},
 		&d);
 
-	WORD tmp = 15;
-
-	SetConsoleCursorPosition(consoleOutput, { 3, 28} );
-
-	d = 0;
+	//SetConsoleCursorPosition(*consoleOutput, { 3, 28} );
 }
 
 void Application::drawCanvas()
@@ -202,7 +249,7 @@ void Application::drawCanvas()
 
 			// output char
 			WriteConsoleOutputCharacterW(
-				consoleOutput,
+				*consoleOutput,
 				&activeFile->marks[y + filePos.y][x + filePos.x].znak,
 				1,
 				pos,
@@ -210,7 +257,7 @@ void Application::drawCanvas()
 			
 			// Add color
 			WriteConsoleOutputAttribute(
-				consoleOutput,
+				*consoleOutput,
 				&tmp,
 				1,
 				pos,
@@ -227,7 +274,7 @@ void Application::drawCanvas()
 		pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y - 1) };
 		// output char
 		WriteConsoleOutputCharacterW(
-			consoleOutput,
+			*consoleOutput,
 			&dd,
 			1,
 			pos,
@@ -235,7 +282,7 @@ void Application::drawCanvas()
 
 		// Add color
 		WriteConsoleOutputAttribute(
-			consoleOutput,
+			*consoleOutput,
 			&tmp,
 			1,
 			pos,
@@ -244,7 +291,7 @@ void Application::drawCanvas()
 		pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y + maxDraw.y) };
 		// output char
 		WriteConsoleOutputCharacterW(
-			consoleOutput,
+			*consoleOutput,
 			&dd,
 			1,
 			pos,
@@ -252,7 +299,7 @@ void Application::drawCanvas()
 
 		// Add color
 		WriteConsoleOutputAttribute(
-			consoleOutput,
+			*consoleOutput,
 			&tmp,
 			1,
 			pos,
@@ -266,7 +313,7 @@ void Application::drawCanvas()
 		pos = COORD{ static_cast<short>(drawingPos.x - 1), static_cast<short>(drawingPos.y + y ) };
 		// output char
 		WriteConsoleOutputCharacterW(
-			consoleOutput,
+			*consoleOutput,
 			&dd,
 			1,
 			pos,
@@ -274,7 +321,7 @@ void Application::drawCanvas()
 
 		// Add color
 		WriteConsoleOutputAttribute(
-			consoleOutput,
+			*consoleOutput,
 			&tmp,
 			1,
 			pos,
@@ -283,7 +330,7 @@ void Application::drawCanvas()
 		pos = COORD{ static_cast<short>(drawingPos.x + maxDraw.x), static_cast<short>(drawingPos.y + y) };
 		// output char
 		WriteConsoleOutputCharacterW(
-			consoleOutput,
+			*consoleOutput,
 			&dd,
 			1,
 			pos,
@@ -291,7 +338,7 @@ void Application::drawCanvas()
 
 		// Add color
 		WriteConsoleOutputAttribute(
-			consoleOutput,
+			*consoleOutput,
 			&tmp,
 			1,
 			pos,

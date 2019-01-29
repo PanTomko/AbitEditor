@@ -20,6 +20,9 @@ public:
 	std::wstring menuBuffor;
 	std::wstring optionsBuffer;
 
+	void cleanNav();
+	bool isNavClean;
+
 	Application * app;
 	DWORD writen;
 	

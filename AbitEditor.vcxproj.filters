@@ -95,6 +95,18 @@
     <ClCompile Include="ToolOptionColor.cpp">
       <Filter>ToolOptions\src</Filter>
     </ClCompile>
+    <ClCompile Include="ToolOptionCharTable.cpp">
+      <Filter>ToolOptions\src</Filter>
+    </ClCompile>
+    <ClCompile Include="Range.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="CharTable.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="utf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitA.h">
@@ -138,6 +150,21 @@
     </ClInclude>
     <ClInclude Include="ToolOptionColor.h">
       <Filter>ToolOptions\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolOptionCharTable.h">
+      <Filter>ToolOptions\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Range.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CharTable.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utf.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

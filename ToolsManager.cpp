@@ -20,6 +20,33 @@ ToolsManager::~ToolsManager()
 {
 }
 
+void ToolsManager::cleanNav()
+{
+	WORD clen_color = 15;
+	const wchar_t cleen_char = L' ';
+
+	for (short y = 5; y < 27; y++)
+	{
+		for (short x = 83; x < 119; x++)
+		{
+			WriteConsoleOutputCharacterW(
+				*app->consoleOutput,
+				&cleen_char,
+				1,
+				{ x, y },
+				&writen);
+
+			WriteConsoleOutputAttribute(
+				*app->consoleOutput,
+				&clen_color,
+				1,
+				{ x, y },
+				&writen
+			);
+		}
+	}
+}
+
 void ToolsManager::draw()
 {
 	menuBuffor = L":";
@@ -29,7 +56,7 @@ void ToolsManager::draw()
 	}
 
 	WriteConsoleOutputCharacterW(
-		app->consoleOutput,
+		*app->consoleOutput,
 		menuBuffor.c_str(),
 		menuBuffor.length(),
 		{ 3, 1 },
@@ -52,7 +79,7 @@ void ToolsManager::draw()
 				tmp = normal;
 
 			WriteConsoleOutputAttribute(
-				app->consoleOutput,
+				*app->consoleOutput,
 				&tmp,
 				1,
 				{ 1 + static_cast<short>(i), 1 },
@@ -69,7 +96,7 @@ void ToolsManager::draw()
 		}
 
 		WriteConsoleOutputCharacterW(
-			app->consoleOutput,
+			*app->consoleOutput,
 			optionsBuffer.c_str(),
 			optionsBuffer.length(),
 			{ 83, 3 },
@@ -80,18 +107,18 @@ void ToolsManager::draw()
 			int posOption = optionsBuffer.find(activeOption->name);
 			int lengOption = activeOption->name.length();
 
-			for (int i = 0; i < 36 ; i++)
+			for (int i = 0; i < 37 ; i++)
 			{
-				if (i >= posOption && i < posOption + lengOption)
+				if (i > posOption && i < posOption + lengOption + 1)
 					tmp = color;
 				else
 					tmp = normal;
 
 				WriteConsoleOutputAttribute(
-					app->consoleOutput,
+					*app->consoleOutput,
 					&tmp,
 					1,
-					{ 83 + static_cast<short>(i), 3 },
+					{ 82 + static_cast<short>(i), 3 },
 					&writen
 				);
 			}
@@ -103,7 +130,7 @@ void ToolsManager::draw()
 			for (int i = 0; i <37; i++)
 			{
 				WriteConsoleOutputAttribute(
-					app->consoleOutput,
+					*app->consoleOutput,
 					&normal,
 					1,
 					{ 82 + static_cast<short>(i), 3 },
@@ -117,7 +144,7 @@ void ToolsManager::draw()
 		for (int i = 0; i <118; i++)
 		{
 			WriteConsoleOutputAttribute(
-				app->consoleOutput,
+				*app->consoleOutput,
 				&normal,
 				1,
 				{ 1 + static_cast<short>(i), 1 },
@@ -128,7 +155,7 @@ void ToolsManager::draw()
 		for (int i = 0; i <37; i++)
 		{
 			WriteConsoleOutputAttribute(
-				app->consoleOutput,
+				*app->consoleOutput,
 				&normal,
 				1,
 				{ 82 + static_cast<short>(i), 3 },
@@ -174,7 +201,6 @@ void ToolsManager::update(INPUT_RECORD & record)
 				record.Event.MouseEvent.dwMousePosition.X < 82 + optionsBuffer.length() &&
 				activeTool != nullptr)
 			{
-				if(activeOption != nullptr)std::wcout << activeOption->name;
 				int start_position;
 				int end_position;
 
@@ -186,7 +212,11 @@ void ToolsManager::update(INPUT_RECORD & record)
 					if (record.Event.MouseEvent.dwMousePosition.X > start_position &&
 						record.Event.MouseEvent.dwMousePosition.X <= end_position)
 					{
-						activeOption = i;
+						if (activeOption != i)
+						{
+							cleanNav();
+							activeOption = i;
+						}
 					}
 				}
 			}

@@ -15,7 +15,11 @@ class Application
 {
 public:
 	
-	HANDLE consoleOutput;
+	HANDLE * consoleOutput; // care it's pointer to a pointer !
+
+	HANDLE consoleOutputBufforOne; // <- C pointer
+	HANDLE consoleOutputBufforTwo; // <- C pointer
+
 	HANDLE consoleInput;
 
 	HWND window;
@@ -29,7 +33,7 @@ public:
 	std::wstring layout;
 
 	DWORD d, ic;
-	INPUT_RECORD inputBuffer[256];
+	INPUT_RECORD inputBuffer[1024];
 	SMALL_RECT * windowSize;
 
 	Vector2D drawingPos; // position of canvas
@@ -39,8 +43,10 @@ public:
 	Vector2D filePos;
 
 	void run();
+
 	void update();
-	// void draw();
+	void draw();
+	void clean();
 
 	bool running;
 

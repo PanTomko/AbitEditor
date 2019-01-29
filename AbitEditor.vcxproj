@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BitA.cpp" />
+    <ClCompile Include="CharTable.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="Command_Load.cpp" />
@@ -28,27 +29,35 @@
     <ClCompile Include="Command_Save.cpp" />
     <ClCompile Include="Command_SaveAs.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Range.cpp" />
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="ToolOption.cpp" />
+    <ClCompile Include="ToolOptionCharTable.cpp" />
     <ClCompile Include="ToolOptionColor.cpp" />
     <ClCompile Include="ToolsManager.cpp" />
     <ClCompile Include="Tool_Brush.cpp" />
+    <ClCompile Include="utf.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="BitA.h" />
+    <ClInclude Include="CharTable.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="Command_Load.h" />
     <ClInclude Include="Command_NewFile.h" />
     <ClInclude Include="Command_Save.h" />
     <ClInclude Include="Command_SaveAs.h" />
+    <ClInclude Include="Range.h" />
     <ClInclude Include="Tool.h" />
     <ClInclude Include="ToolOption.h" />
+    <ClInclude Include="ToolOptionCharTable.h" />
     <ClInclude Include="ToolOptionColor.h" />
     <ClInclude Include="ToolsManager.h" />
     <ClInclude Include="Tool_Brush.h" />
+    <ClInclude Include="unicode_data.h" />
+    <ClInclude Include="utf.h" />
     <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

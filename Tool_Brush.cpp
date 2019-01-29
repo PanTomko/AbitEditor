@@ -16,9 +16,8 @@ Tool_Brush::Tool_Brush(ToolsManager * toolManger) : Tool(L" Brush ", toolManger)
 	options.push_back(&color);
 	color.toolManager = toolManger;
 
-	options.push_back(&color2);
-	color2.name = L" xdeee ";
-	color2.toolManager = toolManger;
+	options.push_back(&wcharTable);
+	wcharTable.toolManager = toolManger;
 }
 
 Tool_Brush::~Tool_Brush()

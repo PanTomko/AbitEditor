@@ -4,6 +4,7 @@
 #include "Tool.h"
 #include "ToolOption.h"
 #include "ToolOptionColor.h"
+#include "ToolOptionCharTable.h"
 
 class Tool_Brush : public Tool
 {
@@ -12,7 +13,7 @@ public:
 	Mark cleer_mark;
 
 	ToolOptionColor color;
-	ToolOptionColor color2;
+	ToolOptionCharTable wcharTable;
 
 	void update(INPUT_RECORD & record);
 
