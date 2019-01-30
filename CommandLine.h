@@ -8,21 +8,13 @@
 
 class Application;
 
-class CommandLine
-{
+class CommandLine {
 public:
-	CommandLine();
-	~CommandLine();
-
 	std::wstring comandBuffor;
 	std::wstring cleerBuffor;
 
 	std::vector<Command*>comands_vlist;
-
 	std::vector<std::wstring>parmeters;
-
-	void get_parm();
-	void execute_comand();
 
 	Application * app;
 
@@ -30,7 +22,13 @@ public:
 
 	DWORD writen;
 
+	void get_parm();
+	void execute_comand();
+
 	void update( const KEY_EVENT_RECORD & key);
 	void draw( HANDLE & output );
+
+	CommandLine();
+	~CommandLine();
 };
 

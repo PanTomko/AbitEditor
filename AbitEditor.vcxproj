@@ -36,7 +36,6 @@
     <ClCompile Include="ToolOptionColor.cpp" />
     <ClCompile Include="ToolsManager.cpp" />
     <ClCompile Include="Tool_Brush.cpp" />
-    <ClCompile Include="utf.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -56,8 +55,6 @@
     <ClInclude Include="ToolOptionColor.h" />
     <ClInclude Include="ToolsManager.h" />
     <ClInclude Include="Tool_Brush.h" />
-    <ClInclude Include="unicode_data.h" />
-    <ClInclude Include="utf.h" />
     <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

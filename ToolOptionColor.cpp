@@ -1,11 +1,8 @@
-﻿#include "ToolOptionColor.h"
-#include "Vector2D.h"
+﻿#include <iostream>
 
+#include "ToolOptionColor.h"
 #include "ToolsManager.h"
 #include "Application.h"
-
-#include <iostream>
-
 
 ToolOptionColor::ToolOptionColor() : ToolOption( L" Color " )
 {
@@ -28,25 +25,22 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 		if (mouse.X >= 84 && mouse.X <= 116 && mouse.Y >= 5 && mouse.Y <= 19)
 		{
 			WORD tmp_color;
-			HANDLE real;
-			if (toolManager->app->consoleOutput == &toolManager->app->consoleOutputBufforOne)
-			{
-				real = toolManager->app->consoleOutputBufforTwo;
+			HANDLE active_buffor;
+			if (toolManager->app->consoleOutput == &toolManager->app->consoleOutputBufforOne) {
+				active_buffor = toolManager->app->consoleOutputBufforTwo;
 			}
-			else
-			{
-				real = toolManager->app->consoleOutputBufforOne;
+			else {
+				active_buffor = toolManager->app->consoleOutputBufforOne;
 			}
 
 			ReadConsoleOutputAttribute(
-				real,
+				active_buffor,
 				&tmp_color,
 				1,
 				mouse,
 				&writen);
 			
-			if (tmp_color != 7 && tmp_color != 15)
-			{
+			if (tmp_color != 7 && tmp_color != 15) {
 				picked_color = tmp_color;
 			}
 		}

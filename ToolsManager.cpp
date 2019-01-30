@@ -1,7 +1,7 @@
-﻿#include "ToolsManager.h"
-#include "Application.h"
-#include <iostream>
+﻿#include <iostream>
 
+#include "ToolsManager.h"
+#include "Application.h"
 #include "Tool_Brush.h"
 
 ToolsManager::ToolsManager()
@@ -11,40 +11,10 @@ ToolsManager::ToolsManager()
 
 	// Ini tools
 	tools.push_back(new Tool_Brush(this)); // for painting on canvas
-
-	// Ini tools options
-
 }
 
 ToolsManager::~ToolsManager()
 {
-}
-
-void ToolsManager::cleanNav()
-{
-	WORD clen_color = 15;
-	const wchar_t cleen_char = L' ';
-
-	for (short y = 5; y < 27; y++)
-	{
-		for (short x = 83; x < 119; x++)
-		{
-			WriteConsoleOutputCharacterW(
-				*app->consoleOutput,
-				&cleen_char,
-				1,
-				{ x, y },
-				&writen);
-
-			WriteConsoleOutputAttribute(
-				*app->consoleOutput,
-				&clen_color,
-				1,
-				{ x, y },
-				&writen
-			);
-		}
-	}
 }
 
 void ToolsManager::draw()
@@ -62,7 +32,7 @@ void ToolsManager::draw()
 		{ 3, 1 },
 		&writen);
 
-	WORD normal = 224; // 7
+	WORD normal = 224; // 15
 	WORD color = 192; // 12
 
 	if (activeTool != nullptr)
@@ -214,7 +184,6 @@ void ToolsManager::update(INPUT_RECORD & record)
 					{
 						if (activeOption != i)
 						{
-							cleanNav();
 							activeOption = i;
 						}
 					}
@@ -225,7 +194,6 @@ void ToolsManager::update(INPUT_RECORD & record)
 
 	if (activeTool != nullptr) {
 		activeTool->update(record);
-		
 		
 		if( activeOption != nullptr )
 			activeOption->update(record);

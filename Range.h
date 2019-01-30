@@ -1,6 +1,5 @@
 #pragma once
-class Range
-{
+class Range {
 public:
 	int begin;
 	int end;

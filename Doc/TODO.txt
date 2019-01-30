@@ -1,0 +1,11 @@
+[X] delete unnesecery code for clearing difrent areas
+[] Create style ToolOption
+	[] Create charTable/s
+	[] Draw charTables
+	[] Create interface for swaping charTables
+	[] Add more additional info on to gui
+[] Fix color picking
+[] Add cutom cursor for comand line
+[] create function geter for geting active buffer
+[] change Bit.h size_y/x for one atribute as Vector2D
+

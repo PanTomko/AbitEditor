@@ -2,23 +2,15 @@
 #include <string>
 #include <fstream>
 
-class Mark
-{
+class Mark {
 public:
-
-	wchar_t znak; // wide char lul
-	short color; // Is thi microsoft stuf ?
-
+	wchar_t znak;
+	short color;
 	Mark();
 	~Mark();
-
-private:
-
 };
 
-
-class BitA
-{
+class BitA {
 public:
 
 	std::string name;

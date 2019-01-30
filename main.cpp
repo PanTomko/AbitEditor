@@ -1,8 +1,8 @@
+#include "Application.h"
+
 #include <iostream>
 #include <locale>
 #include <codecvt>
-
-#include "Application.h"
 
 int main(int argc, char * argv[])
 {
@@ -10,11 +10,11 @@ int main(int argc, char * argv[])
 	app.drawLaout();
 	app.toolManadger.draw();
 
-	if (argc > 1)
+	if (argc > 1) 
 	{
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-		std::wstring d = converter.from_bytes(argv[1]);
-		app.loadBitA(d);
+		std::wstring path = converter.from_bytes(argv[1]);
+		app.loadBitA(path);
 	}
 
 	app.run();

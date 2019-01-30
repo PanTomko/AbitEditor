@@ -1,17 +1,15 @@
 #pragma once
 #include <string>
-//#include "CommandLine.h"
+
 class CommandLine;
 
-class Command
-{
+class Command {
 public:
+	CommandLine * comandLine;
 	std::wstring parm_name;
 	int parm_size;
 
 	virtual void execute_command() = 0;
-
-	CommandLine * comandLine;
 
 	Command( std::wstring parm_name, int parm_size = 1);
 	virtual ~Command();

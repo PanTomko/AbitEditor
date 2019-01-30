@@ -1,5 +1,4 @@
 ﻿#include "ToolOptionCharTable.h"
-#include "utf.h"
 #include <iostream>
 
 ToolOptionCharTable::ToolOptionCharTable() : ToolOption( L" Style " )

@@ -108,7 +108,6 @@ void Application::run()
 {
 	while (running)
 	{
-		//std::this_thread::sleep_for(16ms);
 		Sleep(16);
 		update();
 		clean();
@@ -124,7 +123,7 @@ void Application::update()
 		1024,
 		&ic);
 
-	for (int i = 0; i < ic; i++)
+	for (unsigned int i = 0; i < ic; i++)
 	{
 		toolManadger.update(inputBuffer[i]);
 
@@ -215,31 +214,29 @@ void Application::drawLaout()
 }
 
 void Application::drawCanvas()
-{
-	// max drawable size x = 80 y = 30 - 6 = 24
-	// starting pos x = 4 y = 2
-	
+{	
 	if (activeFile == nullptr) return;
+
+	wchar_t dot_char = L'·';
+	WORD tmp = 0;
+	COORD pos;
 
 	drawingPos = { 2, 4 };
 
+	// Calculating starting pos and size of drawing
 	if (activeFile->size_x >= 78) maxDraw.x = 78; 
-	else
-	{
+	else {
 		maxDraw.x = activeFile->size_x;
 		drawingPos.x = static_cast<int>(std::floor( (82 / 2) - (maxDraw.x/2) ));
-		
 	}
 
 	if (activeFile->size_y >= 22) maxDraw.y = 22;
-	else
-	{
+	else {
 		maxDraw.y = activeFile->size_y;
 		drawingPos.y = static_cast<int>(std::ceil( ( 26/2 ) - ( maxDraw.y/2) )) + 2;
 	}
 
-	WORD tmp = 0;
-	COORD pos;
+	// Drawing image form active file
 	for (int y = 0; y < maxDraw.y; y++)
 	{
 		for (int x = 0; x < maxDraw.x; x++)
@@ -247,7 +244,6 @@ void Application::drawCanvas()
 			pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y + y) };
 			tmp = activeFile->marks[y + filePos.y][x + filePos.x].color;
 
-			// output char
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
 				&activeFile->marks[y + filePos.y][x + filePos.x].znak,
@@ -255,96 +251,32 @@ void Application::drawCanvas()
 				pos,
 				&d);
 			
-			// Add color
-			WriteConsoleOutputAttribute(
-				*consoleOutput,
-				&tmp,
-				1,
-				pos,
-				&d);
+			WriteConsoleOutputAttribute(*consoleOutput,&tmp,1,pos,&d);
 		}
 	}
 
 	tmp = 15;
 
-	for (int x = 0; x < maxDraw.x; x++)
-	{
-		wchar_t dd = L'·';
-
+	// Drawing dots around canvas
+	for (int x = 0; x < maxDraw.x; x++) {
 		pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y - 1) };
-		// output char
-		WriteConsoleOutputCharacterW(
-			*consoleOutput,
-			&dd,
-			1,
-			pos,
-			&d);
-
-		// Add color
-		WriteConsoleOutputAttribute(
-			*consoleOutput,
-			&tmp,
-			1,
-			pos,
-			&d);
+		WriteConsoleOutputCharacterW(*consoleOutput, &dot_char, 1, pos, &d);
+		WriteConsoleOutputAttribute(*consoleOutput, &tmp, 1, pos, &d);
 
 		pos = COORD{ static_cast<short>(drawingPos.x + x), static_cast<short>(drawingPos.y + maxDraw.y) };
-		// output char
-		WriteConsoleOutputCharacterW(
-			*consoleOutput,
-			&dd,
-			1,
-			pos,
-			&d);
-
-		// Add color
-		WriteConsoleOutputAttribute(
-			*consoleOutput,
-			&tmp,
-			1,
-			pos,
-			&d);
+		WriteConsoleOutputCharacterW(*consoleOutput, &dot_char, 1, pos, &d);
+		WriteConsoleOutputAttribute(*consoleOutput, &tmp, 1, pos, &d);
 	}
 
-	for (int y = 0; y < maxDraw.y; y++)
-	{
-		wchar_t dd = L'·';
-
+	for (int y = 0; y < maxDraw.y; y++) {
 		pos = COORD{ static_cast<short>(drawingPos.x - 1), static_cast<short>(drawingPos.y + y ) };
-		// output char
-		WriteConsoleOutputCharacterW(
-			*consoleOutput,
-			&dd,
-			1,
-			pos,
-			&d);
-
-		// Add color
-		WriteConsoleOutputAttribute(
-			*consoleOutput,
-			&tmp,
-			1,
-			pos,
-			&d);
+		WriteConsoleOutputCharacterW(*consoleOutput, &dot_char, 1, pos, &d);
+		WriteConsoleOutputAttribute(*consoleOutput, &tmp, 1, pos, &d);
 
 		pos = COORD{ static_cast<short>(drawingPos.x + maxDraw.x), static_cast<short>(drawingPos.y + y) };
-		// output char
-		WriteConsoleOutputCharacterW(
-			*consoleOutput,
-			&dd,
-			1,
-			pos,
-			&d);
-
-		// Add color
-		WriteConsoleOutputAttribute(
-			*consoleOutput,
-			&tmp,
-			1,
-			pos,
-			&d);
+		WriteConsoleOutputCharacterW(*consoleOutput, &dot_char, 1, pos, &d);
+		WriteConsoleOutputAttribute(*consoleOutput,&tmp, 1, pos, &d);
 	}
-	
 }
 
 bool Application::loadBitA(std::wstring path)
@@ -378,29 +310,6 @@ bool Application::loadBitA(std::wstring path)
 			bitAFile->marks[y][x].color = color;
 			bitAFile->marks[y][x].znak = znak;
 		}
-	}
-
-	file.close();
-
-	return false;
-}
-
-
-bool Application::saveBitA()
-{
-	std::fstream file(activeFile->path, std::ios::in | std::ios::out | std::ios::trunc); // open and delete text form file
-
-	file << activeFile->size_x << ' ' << activeFile->size_y << std::endl; // save size
-
-	// ======================================= save marks
-	for (int y = 0; y < activeFile->size_y; y++) 
-	{
-		for (int x = 0; x < activeFile->size_x; x++)
-		{
-			file << static_cast<int>(activeFile->marks[y][x].color) << ' ' << static_cast<int>(activeFile->marks[y][x].znak);
-			if (x + 1 < activeFile->size_x) file << ' ';
-		}
-		file << std::endl;
 	}
 
 	file.close();
