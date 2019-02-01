@@ -1,4 +1,4 @@
-#include "CommandLine.h"
+﻿#include "CommandLine.h"
 #include "Application.h"
 
 #include "Command_Save.h"
@@ -21,6 +21,10 @@ CommandLine::CommandLine()
 	}
 	//========================
 
+	active = true;
+	activeChar = L'√';
+	unActiveChar = L'X';
+
 	comandBuffor = L"";
 	pos_fix = 0;
 }
@@ -34,7 +38,7 @@ CommandLine::~CommandLine()
 
 void CommandLine::get_parm()
 {
-	std::wstringstream wss{comandBuffor};
+	std::wstringstream wss{ comandBuffor };
 	std::wstring item;
 
 	while (wss >> item)
@@ -46,7 +50,7 @@ void CommandLine::get_parm()
 void CommandLine::execute_comand()
 {
 	get_parm();
-	
+
 	for (auto & i : comands_vlist)
 	{
 		if (i->parm_name == parmeters[0])
@@ -59,57 +63,72 @@ void CommandLine::execute_comand()
 	parmeters.clear();
 }
 
-void CommandLine::update( const KEY_EVENT_RECORD & key )
+void CommandLine::update(const INPUT_RECORD & record)
 {
 	// 8     - delate
 	// 13    - enter
 	// 32    - space
 	// 37/40 - arows
 
-	// ignore shift
-	if (key.wVirtualKeyCode == 1718 ||
-		key.wVirtualKeyCode == 17 ||
-		key.wVirtualKeyCode == 16 || // Shift
-		key.wVirtualKeyCode == 18) 
-			return;
-
-	if (key.bKeyDown)
+	// Mouse
+	if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 	{
-		// Deleting
-		if (key.wVirtualKeyCode == 8) {
-			if (comandBuffor.length() > 0) {
-				comandBuffor.erase(comandBuffor.length() + pos_fix - 1,1);
+		if (record.Event.MouseEvent.dwMousePosition.X == 117 &&
+			record.Event.MouseEvent.dwMousePosition.Y == 28) {
+
+			active = active ? false : true;
+		}
+	}
+
+	// Keyboard
+	if (record.EventType == KEY_EVENT && active)
+	{
+		KEY_EVENT_RECORD key = record.Event.KeyEvent;
+	
+		if (key.wVirtualKeyCode == 1718 ||
+			key.wVirtualKeyCode == 17 ||
+			key.wVirtualKeyCode == 16 || // Shift
+			key.wVirtualKeyCode == 18) 
+				return;
+
+		if (key.bKeyDown)
+		{
+			// Deleting
+			if (key.wVirtualKeyCode == 8) {
+				if (comandBuffor.length() > 0) {
+					comandBuffor.erase(comandBuffor.length() + pos_fix - 1,1);
+				}
+				return;
 			}
-			return;
-		}
 
-		if (key.wVirtualKeyCode == 37) {
-			if (pos_fix - 1 >= comandBuffor.length() && -pos_fix < comandBuffor.length() ) {
-				pos_fix--;
+			if (key.wVirtualKeyCode == 37) {
+				if (pos_fix - 1 >= comandBuffor.length() && -pos_fix < comandBuffor.length() ) {
+					pos_fix--;
+				}
+				return;
 			}
-			return;
-		}
 
-		// Arrows <- ->
-		if (key.wVirtualKeyCode == 39) {
-			if (pos_fix < 0) {
-				pos_fix++;
+			// Arrows <- ->
+			if (key.wVirtualKeyCode == 39) {
+				if (pos_fix < 0) {
+					pos_fix++;
+				}
+				return;
 			}
-			return;
-		}
 
-		// Enter
-		if (key.wVirtualKeyCode == 13) {
-			pos_fix = 0;
-			execute_comand();
-			comandBuffor.clear();
-			return;
-		}
+			// Enter
+			if (key.wVirtualKeyCode == 13) {
+				pos_fix = 0;
+				execute_comand();
+				comandBuffor.clear();
+				return;
+			}
 
-		if (pos_fix == 0)
-			comandBuffor.push_back(key.uChar.UnicodeChar);
-		else if (pos_fix < 0) {
-			comandBuffor.insert(comandBuffor.length() + pos_fix, &key.uChar.UnicodeChar,1);
+			if (pos_fix == 0)
+				comandBuffor.push_back(key.uChar.UnicodeChar);
+			else if (pos_fix < 0) {
+				comandBuffor.insert(comandBuffor.length() + pos_fix, &key.uChar.UnicodeChar,1);
+			}
 		}
 	}
 }
@@ -124,4 +143,11 @@ void CommandLine::draw( HANDLE & output )
 		&writen);
 
 	SetConsoleCursorPosition(output, { 3 + static_cast<short>(comandBuffor.length() + pos_fix), 28 });
+
+	WriteConsoleOutputCharacterW(
+		output,
+		active ? &activeChar : &unActiveChar,
+		1,
+		{ 117 , 28 },
+		&writen);
 }

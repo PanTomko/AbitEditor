@@ -22,10 +22,14 @@ public:
 
 	DWORD writen;
 
+	bool active;
+	wchar_t activeChar;
+	wchar_t unActiveChar;
+
 	void get_parm();
 	void execute_comand();
 
-	void update( const KEY_EVENT_RECORD & key);
+	void update(const INPUT_RECORD & record);
 	void draw( HANDLE & output );
 
 	CommandLine();

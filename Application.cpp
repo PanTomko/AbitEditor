@@ -126,19 +126,10 @@ void Application::update()
 	for (unsigned int i = 0; i < ic; i++)
 	{
 		toolManadger.update(inputBuffer[i]);
-
-		switch (inputBuffer[i].EventType){
-			case MOUSE_EVENT:
-				break;
-
-			case KEY_EVENT:
-				comandLine.update(inputBuffer[i].Event.KeyEvent);
-				break;
-
-			default:
-				break;
-		}
+		comandLine.update(inputBuffer[i]);
+		updateCanvas(inputBuffer[i]);
 	}
+
 	FlushConsoleInputBuffer(consoleInput);
 	ic = 0;
 }
@@ -276,6 +267,33 @@ void Application::drawCanvas()
 		pos = COORD{ static_cast<short>(drawingPos.x + maxDraw.x), static_cast<short>(drawingPos.y + y) };
 		WriteConsoleOutputCharacterW(*consoleOutput, &dot_char, 1, pos, &d);
 		WriteConsoleOutputAttribute(*consoleOutput,&tmp, 1, pos, &d);
+	}
+}
+
+void Application::updateCanvas(const INPUT_RECORD & record)
+{
+	// 37/40 - arows
+
+	if (record.EventType == KEY_EVENT) {
+		KEY_EVENT_RECORD key = record.Event.KeyEvent;
+
+		if (activeFile != nullptr) {
+			if (key.wVirtualKeyCode == 39 && filePos.x + 1 < activeFile->size_x - maxDraw.x ) {
+				filePos.x++;
+			}
+			
+			if (key.wVirtualKeyCode == 37 && filePos.x - 1 >= 0) {
+				filePos.x--;
+			}
+			
+			if (key.wVirtualKeyCode == 38 && filePos.y - 1 >= 0) {
+				filePos.y--;
+			}
+
+			if (key.wVirtualKeyCode == 40 && filePos.y + 1 < activeFile->size_y - maxDraw.y) {
+				filePos.y++;
+			}
+		}
 	}
 }
 

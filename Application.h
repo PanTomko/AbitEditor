@@ -45,6 +45,7 @@ public:
 
 	void drawLaout();
 	void drawCanvas();
+	void updateCanvas( const INPUT_RECORD & record);
 	bool isMouseOnCanvas(COORD & mouse_position);
 
 	bool loadBitA( std::wstring path );

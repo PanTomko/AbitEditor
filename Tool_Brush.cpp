@@ -39,10 +39,10 @@ void Tool_Brush::update(INPUT_RECORD & record)
 		if (app->isMouseOnCanvas(position))
 		{
 			if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED){
-				app->activeFile->marks[position.Y - app->drawingPos.y][position.X - app->drawingPos.x] = tmp; // y / x
+				app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x] = tmp; // y / x
 			}
 			else if (record.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED){
-				app->activeFile->marks[position.Y - app->drawingPos.y][position.X - app->drawingPos.x] = cleer_mark; // y / x
+				app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x] = cleer_mark; // y / x
 			}
 		}
 		else
