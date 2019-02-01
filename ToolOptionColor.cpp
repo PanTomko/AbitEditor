@@ -21,6 +21,7 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 	{
 		// X - 84/116   Y - 5/19
 		COORD mouse = record.Event.MouseEvent.dwMousePosition;
+		wchar_t tmp;
 		
 		if (mouse.X >= 84 && mouse.X <= 116 && mouse.Y >= 5 && mouse.Y <= 19)
 		{
@@ -40,7 +41,9 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 				mouse,
 				&writen);
 			
-			if (tmp_color != 7 && tmp_color != 15) {
+			ReadConsoleOutputCharacterW(active_buffor, &tmp, 1, mouse, &writen);
+
+			if (tmp != L' ') {
 				picked_color = tmp_color;
 			}
 		}

@@ -1,14 +1,17 @@
 #pragma once
+#include <cstdint> 
+
+
 class Range {
 public:
-	int begin;
-	int end;
-	int on_nr;
-
-	int getNext();
+	long int begin;
+	long int end;
+	long int on_nr;
+	
+	long int getNext();
 	void reset();
 
-	Range(int begin = 0, int end = 0);
+	Range(long int begin = 0, long int end = 0);
 	~Range();
 };
 

@@ -1,6 +1,5 @@
 ﻿#include "Tool_Brush.h"
 #include "Vector2D.h"
-
 #include "ToolsManager.h"
 #include "Application.h"
 #include "CommandLine.h"
@@ -15,6 +14,7 @@ Tool_Brush::Tool_Brush(ToolsManager * toolManger) : Tool(L" Brush ", toolManger)
 	
 	options.push_back(&color);
 	color.toolManager = toolManger;
+	color.znak = &wcharTable.char_to_use;
 
 	options.push_back(&wcharTable);
 	wcharTable.toolManager = toolManger;
@@ -31,16 +31,17 @@ void Tool_Brush::update(INPUT_RECORD & record)
 		auto * app = toolManager->app;
 		if (app->activeFile == nullptr) return;
 		COORD position = record.Event.MouseEvent.dwMousePosition;
+		DWORD writen;
 
 		tmp.color = color.picked_color;
+		tmp.znak = wcharTable.char_to_use;
 
 		if (app->isMouseOnCanvas(position))
 		{
 			if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED){
 				app->activeFile->marks[position.Y - app->drawingPos.y][position.X - app->drawingPos.x] = tmp; // y / x
 			}
-
-			if (record.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED){
+			else if (record.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED){
 				app->activeFile->marks[position.Y - app->drawingPos.y][position.X - app->drawingPos.x] = cleer_mark; // y / x
 			}
 		}

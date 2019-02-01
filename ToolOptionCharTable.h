@@ -13,7 +13,14 @@ public:
 
 	wchar_t char_to_use;
 	CharTable * activeCharTable;
-	CharTable lettersTable;
+	std::vector<CharTable*>charTables;
+
+	int menu_position;
+
+	CharTable commonTable;
+	CharTable specialTable;
+	CharTable extraTable;
+	CharTable smallDots;
 
 	ToolOptionCharTable();
 	~ToolOptionCharTable();

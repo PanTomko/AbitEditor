@@ -1,6 +1,5 @@
 #pragma once
 #include "BitA.h"
-
 #include "Tool.h"
 #include "ToolOption.h"
 #include "ToolOptionColor.h"

@@ -1,6 +1,6 @@
 #include "Range.h"
 
-Range::Range(int begin, int end)
+Range::Range(long int begin, long int end)
 {
 	this->begin = begin;
 	this->end = end;
@@ -11,7 +11,7 @@ Range::~Range()
 {
 }
 
-int Range::getNext()
+long int Range::getNext()
 {
 	if (on_nr + 1 > end)
 	{
