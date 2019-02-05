@@ -104,6 +104,9 @@
     <ClCompile Include="CharTable.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Tool_Picker.cpp">
+      <Filter>Tools\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitA.h">
@@ -156,6 +159,9 @@
     </ClInclude>
     <ClInclude Include="CharTable.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Picker.h">
+      <Filter>Tools\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

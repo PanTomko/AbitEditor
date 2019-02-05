@@ -14,7 +14,7 @@ public:
 	ToolOptionColor color;
 	ToolOptionCharTable wcharTable;
 
-	void update(INPUT_RECORD & record);
+	void update(INPUT_RECORD & record) override;
 
 	Tool_Brush(ToolsManager * toolManger);
 	~Tool_Brush();

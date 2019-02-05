@@ -21,6 +21,9 @@ public:
 
 	Application * app;
 	DWORD writen;
+
+	WORD picked_color;
+	wchar_t picked_char;
 	
 	void draw();
 	void update(INPUT_RECORD & record );

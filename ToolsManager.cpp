@@ -3,14 +3,19 @@
 #include "ToolsManager.h"
 #include "Application.h"
 #include "Tool_Brush.h"
+#include "Tool_Picker.h"
 
 ToolsManager::ToolsManager()
 {
 	activeTool = nullptr;
 	activeOption = nullptr;
 
+	picked_char = L'█';
+	picked_color = 15;
+
 	// Ini tools
-	tools.push_back(new Tool_Brush(this)); // for painting on canvas
+	tools.push_back(new Tool_Brush(this));	// for painting on canvas
+	tools.push_back(new Tool_Picker(this));	// for picking colors/chars form canvas 
 }
 
 ToolsManager::~ToolsManager()
@@ -160,7 +165,7 @@ void ToolsManager::update(INPUT_RECORD & record)
 						if (activeTool != i)
 						{
 							activeTool = i;
-							activeOption = nullptr;
+							activeOption = i->options.size() > 0 ? i->options[0] : nullptr;
 						}
 					}
 				}

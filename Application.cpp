@@ -274,7 +274,7 @@ void Application::updateCanvas(const INPUT_RECORD & record)
 {
 	// 37/40 - arows
 
-	if (record.EventType == KEY_EVENT) {
+	if (record.EventType == KEY_EVENT && !comandLine.active) {
 		KEY_EVENT_RECORD key = record.Event.KeyEvent;
 
 		if (activeFile != nullptr) {

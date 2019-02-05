@@ -36,8 +36,6 @@ ToolOptionCharTable::ToolOptionCharTable() : ToolOption( L" Style " )
 		i->calculateChars();
 	}
 
-	char_to_use = 0x2580;
-
 	menu_position = 0;
 	activeCharTable = charTables[menu_position];
 }
@@ -114,7 +112,7 @@ void ToolOptionCharTable::draw(HANDLE * consoleOutput)
 		{
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
-				&char_to_use,
+				&toolManager->picked_char,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);
@@ -132,10 +130,11 @@ void ToolOptionCharTable::update(INPUT_RECORD & record)
 		auto & app = toolManager->app;
 		wchar_t tmp;
 
-		if (mous_position.X >= 83 && mous_position.X <= 118 && mous_position.Y >= 6 && mous_position.Y <= 28){
+		if (mous_position.X >= 83 && mous_position.X <= 118 && mous_position.Y >= 6 && mous_position.Y <= 26){
 			ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, mous_position, &writen);
-			if (tmp != L' ')
-				char_to_use = tmp;
+			if (tmp != L' ') {
+				toolManager->picked_char = tmp;
+			}	
 		}
 
 		if (mous_position.Y == 5 && mous_position.X >= 83 && mous_position.X <= 118){

@@ -9,8 +9,9 @@
 	[X] Add some more chars
 [X] Fix color picking
 [X] Add colored char to color option
-[] Add way of moving canvas
-	[] Add way of deactivateing comand line
+[X] Add way of moving canvas
+	[X] change way of getting events for comand line
+	[X] Add way of deactivateing comand line
 [] Create tool for picking colors/chars from canvas
 	[] create class
 	[] add it to menu

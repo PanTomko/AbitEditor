@@ -45,6 +45,7 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 
 			if (tmp != L' ') {
 				picked_color = tmp_color;
+				toolManager->picked_color = tmp_color;
 			}
 		}
 	}
@@ -95,7 +96,7 @@ void ToolOptionColor::draw(HANDLE * consoleOutput)
 
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
-				znak != nullptr ? znak : &default_znak,
+				&toolManager->picked_char,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);
