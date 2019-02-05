@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "CommandLine.h"
 
-Tool_Brush::Tool_Brush(ToolsManager * toolManger) : Tool(L" Brush ", toolManger)
+Tool_Brush::Tool_Brush() : Tool(L" Brush ")
 {
 	tmp.znak = L'░';
 	tmp.color = 2;
@@ -13,11 +13,9 @@ Tool_Brush::Tool_Brush(ToolsManager * toolManger) : Tool(L" Brush ", toolManger)
 	cleer_mark.color = 7;
 	
 	options.push_back(&color);
-	color.toolManager = toolManger;
 	color.znak = &wcharTable.char_to_use;
 
 	options.push_back(&wcharTable);
-	wcharTable.toolManager = toolManger;
 }
 
 Tool_Brush::~Tool_Brush()
@@ -28,13 +26,13 @@ void Tool_Brush::update(INPUT_RECORD & record)
 {
 	if (record.EventType == MOUSE_EVENT)
 	{
-		auto * app = toolManager->app;
+		auto * app = ToolsManager::toolsManager->app;
 		if (app->activeFile == nullptr) return;
 		COORD position = record.Event.MouseEvent.dwMousePosition;
 		DWORD writen;
 
-		tmp.color = toolManager->picked_color;
-		tmp.znak = toolManager->picked_char;
+		tmp.color = ToolsManager::toolsManager->picked_color;
+		tmp.znak = ToolsManager::toolsManager->picked_char;
 
 		if (app->isMouseOnCanvas(position))
 		{
@@ -49,6 +47,5 @@ void Tool_Brush::update(INPUT_RECORD & record)
 		{
 			return;
 		}
-
 	}
 }

@@ -1,4 +1,5 @@
 ﻿#include "Application.h"
+#include "ToolsManager.h"
 
 // Macro for _setmode
 #include <io.h>
@@ -94,7 +95,8 @@ Application::Application()
 	activeFile = nullptr;
 
 	comandLine.app = this;
-	toolManadger.app = this;
+
+	ToolsManager::toolsManager->app = this;
 
 	running = true;
 }
@@ -125,7 +127,7 @@ void Application::update()
 
 	for (unsigned int i = 0; i < ic; i++)
 	{
-		toolManadger.update(inputBuffer[i]);
+		ToolsManager::toolsManager->update(inputBuffer[i]);
 		comandLine.update(inputBuffer[i]);
 		updateCanvas(inputBuffer[i]);
 	}
@@ -138,7 +140,7 @@ void Application::draw()
 {
 	drawLaout();
 	drawCanvas();
-	toolManadger.draw();
+	ToolsManager::toolsManager->draw();
 	comandLine.draw(*consoleOutput);
 }
 

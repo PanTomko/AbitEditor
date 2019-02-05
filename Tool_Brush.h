@@ -16,7 +16,7 @@ public:
 
 	void update(INPUT_RECORD & record) override;
 
-	Tool_Brush(ToolsManager * toolManger);
+	Tool_Brush();
 	~Tool_Brush();
 };
 

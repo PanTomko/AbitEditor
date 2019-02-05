@@ -1,9 +1,8 @@
 #include "Tool.h"
 
-Tool::Tool( std::wstring name, ToolsManager * toolMan)
+Tool::Tool( std::wstring name )
 {
 	this->name = name;
-	this->toolManager = toolMan;
 }
 
 Tool::~Tool()

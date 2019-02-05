@@ -27,11 +27,11 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 		{
 			WORD tmp_color;
 			HANDLE active_buffor;
-			if (toolManager->app->consoleOutput == &toolManager->app->consoleOutputBufforOne) {
-				active_buffor = toolManager->app->consoleOutputBufforTwo;
+			if (ToolsManager::toolsManager->app->consoleOutput == &ToolsManager::toolsManager->app->consoleOutputBufforOne) {
+				active_buffor = ToolsManager::toolsManager->app->consoleOutputBufforTwo;
 			}
 			else {
-				active_buffor = toolManager->app->consoleOutputBufforOne;
+				active_buffor = ToolsManager::toolsManager->app->consoleOutputBufforOne;
 			}
 
 			ReadConsoleOutputAttribute(
@@ -45,7 +45,7 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 
 			if (tmp != L' ') {
 				picked_color = tmp_color;
-				toolManager->picked_color = tmp_color;
+				ToolsManager::toolsManager->picked_color = tmp_color;
 			}
 		}
 	}
@@ -96,7 +96,7 @@ void ToolOptionColor::draw(HANDLE * consoleOutput)
 
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
-				&toolManager->picked_char,
+				&ToolsManager::toolsManager->picked_char,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);

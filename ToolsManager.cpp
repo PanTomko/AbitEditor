@@ -1,9 +1,11 @@
-﻿#include <iostream>
-
-#include "ToolsManager.h"
+﻿#include "ToolsManager.h"
 #include "Application.h"
 #include "Tool_Brush.h"
 #include "Tool_Picker.h"
+
+#include <iostream>
+
+ToolsManager * ToolsManager::toolsManager = new ToolsManager();
 
 ToolsManager::ToolsManager()
 {
@@ -14,8 +16,8 @@ ToolsManager::ToolsManager()
 	picked_color = 15;
 
 	// Ini tools
-	tools.push_back(new Tool_Brush(this));	// for painting on canvas
-	tools.push_back(new Tool_Picker(this));	// for picking colors/chars form canvas 
+	tools.push_back(new Tool_Brush());	// for painting on canvas
+	tools.push_back(new Tool_Picker());	// for picking colors/chars form canvas 
 }
 
 ToolsManager::~ToolsManager()

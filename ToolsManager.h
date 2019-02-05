@@ -7,10 +7,15 @@
 
 class Application;
 
-class ToolsManager
+// singleton
+class ToolsManager 
 {
+	ToolsManager();
+
 public:
 
+	static ToolsManager * toolsManager;
+	
 	std::vector<Tool*>tools;
 
 	Tool * activeTool;
@@ -28,7 +33,9 @@ public:
 	void draw();
 	void update(INPUT_RECORD & record );
 
-	ToolsManager();
+	ToolsManager(const ToolsManager & tool) = delete;
 	~ToolsManager();
 };
+
+
 

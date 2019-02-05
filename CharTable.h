@@ -1,11 +1,9 @@
 #pragma once
+#include "Range.h"
+
 #include <vector>
 #include <string.h>
 #include <windows.h>
-
-#include "Range.h"
-
-
 
 class CharTable
 {

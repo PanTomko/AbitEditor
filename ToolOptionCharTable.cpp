@@ -112,7 +112,7 @@ void ToolOptionCharTable::draw(HANDLE * consoleOutput)
 		{
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
-				&toolManager->picked_char,
+				&ToolsManager::toolsManager->picked_char,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);
@@ -127,13 +127,13 @@ void ToolOptionCharTable::update(INPUT_RECORD & record)
 	if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 	{
 		COORD mous_position = record.Event.MouseEvent.dwMousePosition;
-		auto & app = toolManager->app;
+		auto & app = ToolsManager::toolsManager->app;
 		wchar_t tmp;
 
 		if (mous_position.X >= 83 && mous_position.X <= 118 && mous_position.Y >= 6 && mous_position.Y <= 26){
 			ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, mous_position, &writen);
 			if (tmp != L' ') {
-				toolManager->picked_char = tmp;
+				ToolsManager::toolsManager->picked_char = tmp;
 			}	
 		}
 

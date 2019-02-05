@@ -8,7 +8,7 @@ public:
 	wchar_t picked_char;
 	WORD picked_color;
 
-	Tool_Picker(ToolsManager * toolManger);
+	Tool_Picker();
 	~Tool_Picker();
 };
 

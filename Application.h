@@ -2,7 +2,6 @@
 #include "BitA.h"
 #include "Vector2D.h"
 #include "CommandLine.h"
-#include "ToolsManager.h"
 
 #include <string>
 #include <windows.h>
@@ -23,7 +22,6 @@ public:
 	std::chrono::system_clock::time_point t;
 	
 	CommandLine comandLine;
-	ToolsManager toolManadger;
 
 	std::wstring layout;
 
