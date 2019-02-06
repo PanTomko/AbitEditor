@@ -1,10 +1,10 @@
 #pragma once
+#include "Command.h"
+
 #include <windows.h>
 #include <string>
 #include <sstream>
 #include <vector>
-
-#include "Command.h"
 
 class Application;
 

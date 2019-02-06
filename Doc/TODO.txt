@@ -1,29 +1,21 @@
-[X] delete unnesecery code for clearing difrent areas
-[X] Create style ToolOption
-	[X] add function for validation of unicode wide chars
-	[X] Create charTable/s
-	[X] Draw charTables
-	[X] Create interface for swaping charTables
-	[X] Make logic for swaping CharTables
-	[X] Add more additional info on to gui
-	[X] Add some more chars
-[X] Fix color picking
-[X] Add colored char to color option
-[X] Add way of moving canvas
-	[X] change way of getting events for comand line
-	[X] Add way of deactivateing comand line
 [] Create tool for picking colors/chars from canvas
-	[] create class
-	[] add it to menu
+	[X] create class
+	[X] add it to menu
 	[] add option to visual what was picked and what to pick
+
 [] Create bucket tool
 	[] create tool
 	[] add option for color
 	[] add option for char
 	[] make logic
+
 [] Add command for filling file with char/color
+
 [] Add command for renaming file
+
 [] create function geter for geting active buffer
+
 [] change Bit.h size_y/x for one atribute as Vector2D
+
 [] Add cutom cursor for comand line
 

@@ -1,5 +1,7 @@
 ﻿#include "ToolsManager.h"
 #include "Application.h"
+#include "CommandLine.h"
+
 #include "Tool_Brush.h"
 #include "Tool_Picker.h"
 
@@ -16,8 +18,8 @@ ToolsManager::ToolsManager()
 	picked_color = 15;
 
 	// Ini tools
-	tools.push_back(new Tool_Brush());	// for painting on canvas
-	tools.push_back(new Tool_Picker());	// for picking colors/chars form canvas 
+	tools.push_back(new Tool_Brush());	// 0 for painting on canvas
+	tools.push_back(new Tool_Picker());	// 1 for picking colors/chars form canvas 
 }
 
 ToolsManager::~ToolsManager()
@@ -196,6 +198,35 @@ void ToolsManager::update(INPUT_RECORD & record)
 					}
 				}
 			}
+		}
+	}
+
+	// Shortcuts
+	if (record.EventType == KEY_EVENT && !CommandLine::instance->active)
+	{
+		Tool * new_tool = nullptr;
+
+		switch (record.Event.KeyEvent.wVirtualKeyCode) 
+		{
+			// Brush
+			case L'B': 
+			case L'1': 
+				new_tool = tools[0];
+					break;
+			
+			// Picker
+			case L'P': 
+			case L'2':
+				new_tool = tools[1];
+				break;
+
+			default:
+				break;
+		}
+
+		if ( new_tool != nullptr && activeTool != new_tool) {
+			activeTool = new_tool;
+			activeOption = activeTool->options.size() > 0 ? activeTool->options[0] : nullptr;
 		}
 	}
 
