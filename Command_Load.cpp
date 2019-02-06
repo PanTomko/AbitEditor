@@ -12,8 +12,6 @@ Command_Load::~Command_Load()
 
 void Command_Load::execute_command()
 {
-	if (comandLine->parmeters.size() == parm_size)
-	{
-		comandLine->app->loadBitA(comandLine->parmeters[1]);
-	}
+	if (CommandLine::instance->parmeters.size() == parm_size)
+		CommandLine::instance->app->loadBitA(CommandLine::instance->parmeters[1]);
 }

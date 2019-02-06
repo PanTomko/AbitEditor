@@ -14,18 +14,18 @@ Command_NewFile::~Command_NewFile()
 
 void Command_NewFile::execute_command()
 {
-	if (comandLine->parmeters.size() == 4)
+	if (CommandLine::instance->parmeters.size() == 4)
 	{
-		delete comandLine->app->activeFile;
+		delete CommandLine::instance->app->activeFile;
 
-		comandLine->app->drawLaout();
+		CommandLine::instance->app->drawLaout();
 
-		comandLine->app->activeFile = new BitA{
-			comandLine->parmeters[1],
-			static_cast<unsigned int>(std::stoi(comandLine->parmeters[2])),
-			static_cast<unsigned int>(std::stoi(comandLine->parmeters[3])),
+		CommandLine::instance->app->activeFile = new BitA{
+			CommandLine::instance->parmeters[1],
+			static_cast<unsigned int>(std::stoi(CommandLine::instance->parmeters[2])),
+			static_cast<unsigned int>(std::stoi(CommandLine::instance->parmeters[3])),
 		};
 
-		comandLine->app->activeFile->populate(L' ', 7);
+		CommandLine::instance->app->activeFile->populate(L' ', 7);
 	}
 }

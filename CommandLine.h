@@ -9,7 +9,13 @@
 class Application;
 
 class CommandLine {
+
+	CommandLine();
+
 public:
+
+	static CommandLine * instance;
+
 	std::wstring comandBuffor;
 	std::wstring cleerBuffor;
 
@@ -32,7 +38,7 @@ public:
 	void update(const INPUT_RECORD & record);
 	void draw( HANDLE & output );
 
-	CommandLine();
+	CommandLine(CommandLine & Obj) = delete;
 	~CommandLine();
 };
 

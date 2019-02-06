@@ -1,5 +1,6 @@
 ﻿#include "Application.h"
 #include "ToolsManager.h"
+#include "CommandLine.h"
 
 // Macro for _setmode
 #include <io.h>
@@ -61,41 +62,44 @@ Application::Application()
 		TRUE
 	);
 
-	layout.append(L"╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-	layout.append(L"║                                                                                                                      ║");
-	layout.append(L"╠════════════════════════════════════════════════════════════════════════════════╦═════════════════════════════════════╣");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ╠═════════════════════════════════════╣");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"║                                                                                ║                                     ║");
-	layout.append(L"╠════════════════════════════════════════════════════════════════════════════════╩═════════════════════════════════════╣");
-	layout.append(L"║ >                                                                                                                    ║");
-	layout.append(L"╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
-
+	// Layout crations
+	{
+		layout.append(L"╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+		layout.append(L"║                                                                                                                      ║");
+		layout.append(L"╠════════════════════════════════════════════════════════════════════════════════╦═════════════════════════════════════╣");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ╠═════════════════════════════════════╣");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"║                                                                                ║                                     ║");
+		layout.append(L"╠════════════════════════════════════════════════════════════════════════════════╩═════════════════════════════════════╣");
+		layout.append(L"║ >                                                                                                                    ║");
+		layout.append(L"╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+	}
+	
+	// Ini
 	activeFile = nullptr;
 
-	comandLine.app = this;
-
+	CommandLine::instance->app = this;
 	ToolsManager::toolsManager->app = this;
 
 	running = true;
@@ -128,7 +132,7 @@ void Application::update()
 	for (unsigned int i = 0; i < ic; i++)
 	{
 		ToolsManager::toolsManager->update(inputBuffer[i]);
-		comandLine.update(inputBuffer[i]);
+		CommandLine::instance->update(inputBuffer[i]);
 		updateCanvas(inputBuffer[i]);
 	}
 
@@ -141,7 +145,7 @@ void Application::draw()
 	drawLaout();
 	drawCanvas();
 	ToolsManager::toolsManager->draw();
-	comandLine.draw(*consoleOutput);
+	CommandLine::instance->draw(*consoleOutput);
 }
 
 void Application::clean()
@@ -276,7 +280,7 @@ void Application::updateCanvas(const INPUT_RECORD & record)
 {
 	// 37/40 - arows
 
-	if (record.EventType == KEY_EVENT && !comandLine.active) {
+	if (record.EventType == KEY_EVENT && !CommandLine::instance->active) {
 		KEY_EVENT_RECORD key = record.Event.KeyEvent;
 
 		if (activeFile != nullptr) {

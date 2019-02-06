@@ -1,7 +1,6 @@
 #pragma once
 #include "BitA.h"
 #include "Vector2D.h"
-#include "CommandLine.h"
 
 #include <string>
 #include <windows.h>
@@ -21,8 +20,6 @@ public:
 
 	std::chrono::system_clock::time_point t;
 	
-	CommandLine comandLine;
-
 	std::wstring layout;
 
 	DWORD d, ic;

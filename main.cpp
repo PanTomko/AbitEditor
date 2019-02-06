@@ -1,4 +1,3 @@
-#include "ToolsManager.h"
 #include "Application.h"
 
 #include <iostream>

@@ -8,17 +8,14 @@
 #include <iostream>
 #include <algorithm>
 
+CommandLine * CommandLine::instance = new CommandLine();
+
 CommandLine::CommandLine()
 {
 	//======================== Adding comands
 	comands_vlist.push_back(new Command_Save());	// "save"
 	comands_vlist.push_back(new Command_Load());	// "load" [path]
 	comands_vlist.push_back(new Command_NewFile());	// "new-file" [path] [size x] [size y]
-
-	for (auto & i : comands_vlist)
-	{
-		i->comandLine = this;
-	}
 	//========================
 
 	active = true;
