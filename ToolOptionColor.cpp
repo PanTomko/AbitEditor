@@ -103,7 +103,7 @@ void ToolOptionColor::draw(HANDLE * consoleOutput)
 
 			WriteConsoleOutputAttribute(
 				*consoleOutput,
-				&picked_color,
+				&ToolsManager::toolsManager->picked_color,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen

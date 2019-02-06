@@ -4,6 +4,7 @@
 
 Tool_Picker::Tool_Picker() : Tool(L" Picker ")
 {
+	options.push_back(&color);
 }
 
 Tool_Picker::~Tool_Picker()
