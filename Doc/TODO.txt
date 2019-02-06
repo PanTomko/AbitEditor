@@ -1,3 +1,11 @@
+[] Restructure project ! 
+
+[] Add History
+   [] add history manager
+   [] add history to picker
+   [] add history to brush
+   [] add shorcuts for backing, forwarding in history
+
 [] Create bucket tool
 	[] create tool
 	[] add option for color
