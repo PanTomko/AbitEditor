@@ -1,6 +1,7 @@
 #pragma once
 #include "Tool.h"
 #include "ToolOption.h"
+#include "Vector2D.h"
 
 #include <vector>
 #include <windows.h>
@@ -29,6 +30,11 @@ public:
 
 	WORD picked_color;
 	wchar_t picked_char;
+
+	bool show_xy;
+
+	// Relative to canvas
+	Vector2D mouse_position_RTC; 
 	
 	void draw();
 	void update(INPUT_RECORD & record );

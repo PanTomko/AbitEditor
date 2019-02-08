@@ -12,13 +12,15 @@
 	[] add option for char
 	[] make logic
 
-[] Add command for filling file with char/color
+Commands
+        [] Add command for filling file with char/color
+        [] Add command for renaming file
 
-[] Add command for renaming file
-
-[] create function geter for geting active buffer
+[?] create function geter for geting active buffer
 
 [] change Bit.h size_y/x for one atribute as Vector2D
+
+[X] add x/y of mouse position relative to canvas
 
 [] Add cutom cursor for comand line
 

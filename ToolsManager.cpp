@@ -20,6 +20,8 @@ ToolsManager::ToolsManager()
 	// Ini tools
 	tools.push_back(new Tool_Brush());	// 0 for painting on canvas
 	tools.push_back(new Tool_Picker());	// 1 for picking colors/chars form canvas 
+
+	show_xy = false;
 }
 
 ToolsManager::~ToolsManager()
@@ -142,12 +144,40 @@ void ToolsManager::draw()
 			);
 		}
 	}
+
+	// Drawing x/y and the end of tool menu
+	if (show_xy) {
+		std::wstring xyBuffer;
+		xyBuffer += L"x : " + std::to_wstring(mouse_position_RTC.x);
+		xyBuffer += L" | y : " + std::to_wstring(mouse_position_RTC.y);
+
+		WriteConsoleOutputCharacterW(
+			*app->consoleOutput,
+			xyBuffer.c_str(),
+			xyBuffer.length(),
+			{ 100, 1 },
+			&writen);
+	}
+	
 }
 
 void ToolsManager::update(INPUT_RECORD & record)
 {
 	if (record.EventType == MOUSE_EVENT)
 	{
+
+		// update x/y on end of tool menu
+		if (app->isMouseOnCanvas(record.Event.MouseEvent.dwMousePosition)) {
+			show_xy = true;
+
+			mouse_position_RTC.x = record.Event.MouseEvent.dwMousePosition.X - app->drawingPos.x + app->filePos.x;
+			mouse_position_RTC.y = record.Event.MouseEvent.dwMousePosition.Y - app->drawingPos.y + app->filePos.y;
+
+		}
+		else {
+			show_xy = false;
+		}
+
 		if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 		{
 			if (record.Event.MouseEvent.dwMousePosition.Y == 1 && 
@@ -200,6 +230,8 @@ void ToolsManager::update(INPUT_RECORD & record)
 			}
 		}
 	}
+
+
 
 	// Shortcuts
 	if (record.EventType == KEY_EVENT && !CommandLine::instance->active)

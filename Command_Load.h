@@ -1,7 +1,6 @@
 #pragma once
 #include "Command.h"
-class Command_Load : public Command
-{
+class Command_Load : public Command {
 public:
 
 	void execute_command();
