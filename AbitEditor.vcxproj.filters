@@ -5,17 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Src\Core">
-      <UniqueIdentifier>{6ab50440-ff17-4bf7-93d6-48d127b7a884}</UniqueIdentifier>
-      <Extensions>cpp;</Extensions>
-    </Filter>
     <Filter Include="Include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Include\Core">
-      <UniqueIdentifier>{fb9432fc-25dd-4ffa-b009-e31e3162a556}</UniqueIdentifier>
-      <Extensions>h;</Extensions>
     </Filter>
     <Filter Include="Include\Tools">
       <UniqueIdentifier>{b15364f9-9936-4b7b-a96b-7c42f0b42462}</UniqueIdentifier>
@@ -23,10 +15,6 @@
     </Filter>
     <Filter Include="Include\ToolOptions">
       <UniqueIdentifier>{4cba8cd3-e58f-4e75-b068-c8fe7ef5635a}</UniqueIdentifier>
-      <Extensions>h;</Extensions>
-    </Filter>
-    <Filter Include="Include\Commands">
-      <UniqueIdentifier>{171c9609-b776-484a-9883-f70c778b22b0}</UniqueIdentifier>
       <Extensions>h;</Extensions>
     </Filter>
     <Filter Include="Src\Tools">
@@ -39,6 +27,18 @@
     </Filter>
     <Filter Include="Src\ToolOptions">
       <UniqueIdentifier>{5e4ae000-acb3-4d49-93e1-015ba0e5ff53}</UniqueIdentifier>
+      <Extensions>cpp;</Extensions>
+    </Filter>
+    <Filter Include="Include\Commands">
+      <UniqueIdentifier>{171c9609-b776-484a-9883-f70c778b22b0}</UniqueIdentifier>
+      <Extensions>h;</Extensions>
+    </Filter>
+    <Filter Include="Include\Core">
+      <UniqueIdentifier>{fb9432fc-25dd-4ffa-b009-e31e3162a556}</UniqueIdentifier>
+      <Extensions>h;</Extensions>
+    </Filter>
+    <Filter Include="Src\Core">
+      <UniqueIdentifier>{6ab50440-ff17-4bf7-93d6-48d127b7a884}</UniqueIdentifier>
       <Extensions>cpp;</Extensions>
     </Filter>
   </ItemGroup>
