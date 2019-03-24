@@ -5,7 +5,7 @@
 class Mark {
 public:
 	wchar_t znak;
-	short color;
+	unsigned short color;
 	Mark();
 	~Mark();
 };

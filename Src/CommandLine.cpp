@@ -46,6 +46,7 @@ void CommandLine::get_parm()
 
 void CommandLine::execute_comand()
 {
+	pos_fix = 0;
 	get_parm();
 
 	for (auto & i : comands_vlist)
@@ -58,6 +59,7 @@ void CommandLine::execute_comand()
 	}
 
 	parmeters.clear();
+	comandBuffor.clear();
 }
 
 void CommandLine::update(const INPUT_RECORD & record)
@@ -115,9 +117,7 @@ void CommandLine::update(const INPUT_RECORD & record)
 
 			// Enter
 			if (key.wVirtualKeyCode == 13) {
-				pos_fix = 0;
 				execute_comand();
-				comandBuffor.clear();
 				return;
 			}
 

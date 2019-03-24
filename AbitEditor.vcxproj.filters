@@ -41,6 +41,18 @@
       <UniqueIdentifier>{6ab50440-ff17-4bf7-93d6-48d127b7a884}</UniqueIdentifier>
       <Extensions>cpp;</Extensions>
     </Filter>
+    <Filter Include="Include\History">
+      <UniqueIdentifier>{5c68b530-07f6-4dc9-b153-c9a5218a46db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\History">
+      <UniqueIdentifier>{958037e3-eb19-4fe4-8c14-7f0e812f503d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Events">
+      <UniqueIdentifier>{aa78d2f6-36c9-4e16-9c8c-68350d2b95af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Event">
+      <UniqueIdentifier>{4378026b-7cf5-49bb-b805-a9d7a428ca10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Application.h">
@@ -96,6 +108,30 @@
     </ClInclude>
     <ClInclude Include="Include\CommandLine.h">
       <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\History.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\HistoryManager.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ColorHistory.h">
+      <Filter>Include\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\WcharHistory.h">
+      <Filter>Include\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MarkHistory.h">
+      <Filter>Include\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Event.h">
+      <Filter>Include\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Keyboard.h">
+      <Filter>Include\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KeyboardEvent.h">
+      <Filter>Include\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -154,5 +190,29 @@
       <Filter>Src\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\History.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\HistoryManager.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ColorHistory.cpp">
+      <Filter>Src\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\WcharHistory.cpp">
+      <Filter>Src\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MarkHistory.cpp">
+      <Filter>Src\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Event.cpp">
+      <Filter>Src\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Keyboard.cpp">
+      <Filter>Src\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\KeyboardEvent.cpp">
+      <Filter>Src\Event</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

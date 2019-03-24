@@ -110,9 +110,10 @@ void ToolOptionCharTable::draw(HANDLE * consoleOutput)
 	{
 		for (short x = 0; x < 9; x++)
 		{
+			wchar_t wchar{ ToolsManager::toolsManager->getPickedChar() };
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
-				&ToolsManager::toolsManager->picked_char,
+				&wchar,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);
@@ -133,7 +134,7 @@ void ToolOptionCharTable::update(INPUT_RECORD & record)
 		if (mous_position.X >= 83 && mous_position.X <= 118 && mous_position.Y >= 6 && mous_position.Y <= 26){
 			ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, mous_position, &writen);
 			if (tmp != L' ') {
-				ToolsManager::toolsManager->picked_char = tmp;
+				ToolsManager::toolsManager->setPickedChar(tmp);
 			}	
 		}
 

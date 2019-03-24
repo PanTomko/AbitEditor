@@ -1,6 +1,7 @@
 ﻿#include "ToolsManager.h"
 #include "Application.h"
 #include "CommandLine.h"
+#include "HistoryManager.h"
 
 #include "Tool_Brush.h"
 #include "Tool_Picker.h"
@@ -231,8 +232,6 @@ void ToolsManager::update(INPUT_RECORD & record)
 		}
 	}
 
-
-
 	// Shortcuts
 	if (record.EventType == KEY_EVENT && !CommandLine::instance->active)
 	{
@@ -252,6 +251,18 @@ void ToolsManager::update(INPUT_RECORD & record)
 				new_tool = tools[1];
 				break;
 
+			// Saving
+			case L'S':
+				if (record.Event.KeyEvent.dwControlKeyState & RIGHT_CTRL_PRESSED ||
+					record.Event.KeyEvent.dwControlKeyState & LEFT_CTRL_PRESSED)
+				{
+					//std::wstring tmp_command_buffer = CommandLine::instance->comandBuffor;
+					CommandLine::instance->comandBuffor = L"save";
+					CommandLine::instance->execute_comand();
+					CommandLine::instance->comandBuffor = L"log->saved";
+				}
+				break;
+
 			default:
 				break;
 		}
@@ -267,5 +278,33 @@ void ToolsManager::update(INPUT_RECORD & record)
 		
 		if( activeOption != nullptr )
 			activeOption->update(record);
+	}
+}
+
+unsigned short ToolsManager::getPickedColor()
+{
+	return picked_color;
+}
+
+wchar_t ToolsManager::getPickedChar()
+{
+	return picked_char;
+}
+
+void ToolsManager::setPickedColor(const unsigned short & color)
+{
+	if (picked_color != color)
+	{
+		HistoryManager::instance->saveHistory(&picked_color, picked_color);
+		picked_color = color;
+	}
+}
+
+void ToolsManager::setPickedChar(const wchar_t & wchar)
+{
+	if (picked_char != wchar)
+	{
+		HistoryManager::instance->saveHistory(&picked_char, picked_char);
+		picked_char = wchar;
 	}
 }

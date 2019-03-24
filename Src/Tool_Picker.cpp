@@ -13,29 +13,34 @@ Tool_Picker::~Tool_Picker()
 
 void Tool_Picker::update(INPUT_RECORD & record)
 {
+	wchar_t wchar;
+	unsigned short color;
 	auto * app = ToolsManager::toolsManager->app;
 	COORD position = record.Event.MouseEvent.dwMousePosition;
-	DWORD writen;
+	unsigned long writen;
 	
 	if (app->isMouseOnCanvas(position))
 	{
 		if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
 			ReadConsoleOutputCharacterW(
 				*app->consoleOutput,
-				&ToolsManager::toolsManager->picked_char,
+				&wchar,
 				1,
 				position,
 				&writen);
+
+			ToolsManager::toolsManager->setPickedChar(wchar);
 		}
 
 		if (record.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED) {
 			ReadConsoleOutputAttribute(
 				*app->consoleOutput,
-				&ToolsManager::toolsManager->picked_color,
+				&color,
 				1,
 				position,
 				&writen);
-			
+
+			ToolsManager::toolsManager->setPickedColor(color);
 		}
 	}
 }

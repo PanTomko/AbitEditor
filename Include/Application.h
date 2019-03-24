@@ -1,18 +1,23 @@
 #pragma once
 #include "BitA.h"
 #include "Vector2D.h"
+#include "Event.h"
 
 #include <string>
 #include <windows.h>
 #include <chrono>
+#include <thread>
+#include <mutex>
+#include <queue>
+
 
 class Application
 {
 public:
 	
-	HANDLE * consoleOutput; // care it's pointer to a pointer 
-	HANDLE consoleOutputBufforOne; // <- C pointer
-	HANDLE consoleOutputBufforTwo; // <- C pointer
+	HANDLE * consoleOutput;			// care it's pointer to a pointer 
+	HANDLE consoleOutputBufforOne;	// <- C pointer
+	HANDLE consoleOutputBufforTwo;	// <- C pointer
 	HANDLE consoleInput;
 
 	HWND window;
@@ -27,19 +32,30 @@ public:
 	SMALL_RECT * windowSize;
 
 	BitA * activeFile;
-	Vector2D filePos;
-	Vector2D drawingPos; // position of canvas
-	Vector2D maxDraw; // size of canvas
+	Vector2D filePos;		// position of right top corner of active file ( starts drawing form it )
+	Vector2D drawingPos;	// position of canvas
+	Vector2D maxDraw;		// size of canvas
+
+	bool mouseLeftButtonRelese;
 
 	void run();
 	bool running;
 
-	void update();
-	void draw();
-	void clean();
+	void update();	// Update application
+	void draw();	// Draw buffer
+	void input();	// proces events
+	void clean();	// Clean buffer
+
+	// Events stuff 
+	bool poolEvent( Event & _event );	// true if any event was "pooled"
+	std::thread thread_input;			// Works with input
+	void readInputEvents();				// Reads input in thread_input
+	std::queue<Event>evetsBuffer;		// Contains events form thread_input
+	std::mutex mutex_evetsBuffer;		// Block acces to evetsBuffer
+
 
 	void drawLaout();
-	void drawCanvas();
+	void drawCanvas();		// Draws activeFile
 	void updateCanvas( const INPUT_RECORD & record);
 	bool isMouseOnCanvas(COORD & mouse_position);
 

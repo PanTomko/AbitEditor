@@ -45,7 +45,7 @@ void ToolOptionColor::update(INPUT_RECORD & record)
 
 			if (tmp != L' ') {
 				picked_color = tmp_color;
-				ToolsManager::toolsManager->picked_color = tmp_color;
+				ToolsManager::toolsManager->setPickedColor(tmp_color);
 			}
 		}
 	}
@@ -93,17 +93,19 @@ void ToolOptionColor::draw(HANDLE * consoleOutput)
 	{
 		for (short x = 0; x < 9; x++)
 		{
+			wchar_t wchar{ ToolsManager::toolsManager->getPickedChar() };
+			unsigned short color{ ToolsManager::toolsManager->getPickedColor() };
 
 			WriteConsoleOutputCharacterW(
 				*consoleOutput,
-				&ToolsManager::toolsManager->picked_char,
+				&wchar,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen);
 
 			WriteConsoleOutputAttribute(
 				*consoleOutput,
-				&ToolsManager::toolsManager->picked_color,
+				&color,
 				1,
 				{ startPos.X + x + 12, startPos.Y + y + 17 },
 				&writen

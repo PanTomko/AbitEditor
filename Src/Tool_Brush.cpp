@@ -31,8 +31,8 @@ void Tool_Brush::update(INPUT_RECORD & record)
 		COORD position = record.Event.MouseEvent.dwMousePosition;
 		DWORD writen;
 
-		tmp.color = ToolsManager::toolsManager->picked_color;
-		tmp.znak = ToolsManager::toolsManager->picked_char;
+		tmp.color = ToolsManager::toolsManager->getPickedColor();
+		tmp.znak = ToolsManager::toolsManager->getPickedChar();
 
 		if (app->isMouseOnCanvas(position))
 		{

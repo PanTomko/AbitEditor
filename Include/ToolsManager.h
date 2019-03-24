@@ -11,36 +11,38 @@ class Application;
 // singleton
 class ToolsManager 
 {
-	ToolsManager();
-
 public:
-
+	~ToolsManager();
+	ToolsManager(const ToolsManager & tool) = delete;
 	static ToolsManager * toolsManager;
-	
-	std::vector<Tool*>tools;
+	Application * app;
 
+	unsigned short getPickedColor();
+	wchar_t getPickedChar();
+
+	void setPickedColor(const unsigned short & color);
+	void setPickedChar(const wchar_t & wchar);
+
+	void draw();
+	void update(INPUT_RECORD & record);
+
+private:
+	std::vector<Tool*>tools;
 	Tool * activeTool;
 	ToolOption * activeOption;
+
+	unsigned short picked_color;
+	wchar_t picked_char;
 
 	std::wstring menuBuffor;
 	std::wstring optionsBuffer;
 
-	Application * app;
-	DWORD writen;
-
-	WORD picked_color;
-	wchar_t picked_char;
-
 	bool show_xy;
+	unsigned long writen;
 
-	// Relative to canvas
-	Vector2D mouse_position_RTC; 
-	
-	void draw();
-	void update(INPUT_RECORD & record );
+	Vector2D mouse_position_RTC; // Relative to canvas
 
-	ToolsManager(const ToolsManager & tool) = delete;
-	~ToolsManager();
+	ToolsManager();
 };
 
 

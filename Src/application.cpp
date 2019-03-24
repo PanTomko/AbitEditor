@@ -1,6 +1,8 @@
 ﻿#include "Application.h"
 #include "ToolsManager.h"
 #include "CommandLine.h"
+#include "HistoryManager.h"
+#include "Keyboard.h"
 
 // Macro for _setmode
 #include <io.h>
@@ -51,6 +53,7 @@ Application::Application()
 	consoleInput = GetStdHandle(STD_INPUT_HANDLE);
 	SetConsoleMode(consoleInput, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
 	SetConsoleMode(consoleOutputBufforTwo, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+	SetConsoleMode(consoleOutputBufforOne, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
 	
 	// Window related
 	_setmode(_fileno(stdout), _O_U16TEXT);
@@ -110,12 +113,35 @@ Application::~Application()
 	delete activeFile;
 }
 
+inline std::wstring convert(const std::string& as)
+{
+	// deal with trivial case of empty string
+	if (as.empty())    return std::wstring();
+
+	// determine required length of new string
+	size_t reqLength = ::MultiByteToWideChar(CP_UTF8, 0, as.c_str(), (int)as.length(), 0, 0);
+
+	// construct new string of required length
+	std::wstring ret(reqLength, L'\0');
+
+	// convert old string to new string
+	::MultiByteToWideChar(CP_UTF8, 0, as.c_str(), (int)as.length(), &ret[0], (int)ret.length());
+
+	// return new string ( compiler should optimize this away )
+	return ret;
+}
+
 void Application::run()
 {
+	thread_input = std::thread(&Application::readInputEvents, this); // Start accumulating events !
+
 	while (running)
 	{
-		Sleep(16);
+		std::this_thread::sleep_for(16ms);
+
+		input();
 		update();
+
 		clean();
 		draw();
 	}
@@ -123,21 +149,10 @@ void Application::run()
 
 void Application::update()
 {
-	PeekConsoleInputW(
-		consoleInput,
-		inputBuffer,
-		1024,
-		&ic);
-
-	for (unsigned int i = 0; i < ic; i++)
-	{
-		ToolsManager::toolsManager->update(inputBuffer[i]);
-		CommandLine::instance->update(inputBuffer[i]);
-		updateCanvas(inputBuffer[i]);
-	}
-
-	FlushConsoleInputBuffer(consoleInput);
-	ic = 0;
+	//ToolsManager::toolsManager->update(inputBuffer[i]);
+	//if(!CommandLine::instance->active) HistoryManager::instance->update(inputBuffer[i]);
+	//updateCanvas(inputBuffer[i]);
+	//CommandLine::instance->update(inputBuffer[i]);
 }
 
 void Application::draw()
@@ -146,6 +161,19 @@ void Application::draw()
 	drawCanvas();
 	ToolsManager::toolsManager->draw();
 	CommandLine::instance->draw(*consoleOutput);
+}
+
+void Application::input()
+{
+	Event _event;
+
+	while (poolEvent(_event))
+	{
+		if (_event.event_type == Event::Type::Keyboard && _event.keyboardEvent.isKey(Key::Shift))
+			CommandLine::instance->comandBuffor += convert(std::bitset<3>(_event.keyboardEvent.keyState).to_string()) + L":";
+		//else
+			//CommandLine::instance->comandBuffor = L"";
+	}
 }
 
 void Application::clean()
@@ -158,7 +186,6 @@ void Application::clean()
 	COORD homeCoorde = { 0, 0 };
 
 	// Swaping active screen buffor with buffor we gonna draw to
-	
 	if (consoleOutput == &consoleOutputBufforOne)
 	{
 		consoleOutput = &consoleOutputBufforTwo;
@@ -170,8 +197,6 @@ void Application::clean()
 		SetConsoleActiveScreenBuffer(consoleOutputBufforTwo);
 	}
 		
-
-	
 	// Get info of buffer we need to clean
 	if (!GetConsoleScreenBufferInfo(*consoleOutput, &bufferInfo)){
 		return;
@@ -181,7 +206,7 @@ void Application::clean()
 
 	FillConsoleOutputCharacterW(
 		*consoleOutput,
-		L'x',
+		L' ',
 		cellsToWrite,
 		homeCoorde,
 		&writenChars
@@ -194,8 +219,76 @@ void Application::clean()
 		homeCoorde,
 		&writenAtributes
 	);
-	//SetConsoleCursorPosition(*consoleOutput, homeCoorde);
-	
+}
+
+bool Application::poolEvent(Event & _event)
+{
+	std::lock_guard<std::mutex> lock(mutex_evetsBuffer);
+
+	if (!evetsBuffer.empty())
+	{
+		_event = evetsBuffer.front();
+		evetsBuffer.pop();
+		return true;
+	}
+
+	return false;
+}
+
+void Application::readInputEvents()
+{
+	while (true)
+	{
+		ReadConsoleInputW(
+			consoleInput,
+			inputBuffer,
+			1024,
+			&ic);
+
+		mutex_evetsBuffer.lock();
+		for (unsigned int i = 0; i < ic; i++)
+		{
+			switch (inputBuffer[i].EventType)
+			{
+				case KEY_EVENT:
+					Event _event;
+					_event.event_type = Event::Type::Keyboard;
+					_event.keyboardEvent.key = static_cast<Key>(inputBuffer[i].Event.KeyEvent.wVirtualKeyCode);
+					_event.keyboardEvent.repeatCount = inputBuffer[i].Event.KeyEvent.wRepeatCount;
+					_event.keyboardEvent.unicode = inputBuffer[i].Event.KeyEvent.uChar.UnicodeChar;
+
+					if (Keyboard::instance->keys.find(_event.keyboardEvent.key) == Keyboard::instance->keys.end()) {
+						Keyboard::instance->keys[_event.keyboardEvent.key] = 0b000u; // Key not found so make one
+					}
+
+					if (inputBuffer[i].Event.KeyEvent.bKeyDown)
+					{
+						if (!bool(Keyboard::instance->keys[_event.keyboardEvent.key] & 0b001)) {
+							Keyboard::instance->keys[_event.keyboardEvent.key] |= 0b101;
+						}
+					}
+					else
+					{
+						Keyboard::instance->keys[_event.keyboardEvent.key] &= ~(1UL << 0);
+						Keyboard::instance->keys[_event.keyboardEvent.key] |= 0b010;
+					}
+
+					_event.keyboardEvent.keyState = Keyboard::instance->keys[_event.keyboardEvent.key];
+					evetsBuffer.push(_event);
+					
+					if (Keyboard::instance->keys[_event.keyboardEvent.key] & 0b010 ) {
+						Keyboard::instance->keys[_event.keyboardEvent.key] &= ~(1UL << 1);
+					}
+
+					if (Keyboard::instance->keys[_event.keyboardEvent.key] & 0b100) {
+						Keyboard::instance->keys[_event.keyboardEvent.key] &= ~(1UL << 2);
+					}
+					
+					break;
+			}
+		}
+		mutex_evetsBuffer.unlock();
+	}
 }
 
 void Application::drawLaout()
@@ -206,8 +299,6 @@ void Application::drawLaout()
 		120*30,
 		{0,0},
 		&d);
-
-	//SetConsoleCursorPosition(*consoleOutput, { 3, 28} );
 }
 
 void Application::drawCanvas()
