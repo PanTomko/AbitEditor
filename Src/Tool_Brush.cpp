@@ -3,6 +3,9 @@
 #include "ToolsManager.h"
 #include "Application.h"
 #include "CommandLine.h"
+#include "Mouse.h"
+#include "HistoryManager.h"
+#include "VectorMarkHistory.h"
 
 Tool_Brush::Tool_Brush() : Tool(L" Brush ")
 {
@@ -22,30 +25,39 @@ Tool_Brush::~Tool_Brush()
 {
 }
 
-void Tool_Brush::update(INPUT_RECORD & record)
+void Tool_Brush::input(Event & event)
 {
-	if (record.EventType == MOUSE_EVENT)
+	if (event.event_type == Event::Type::Mouse)
 	{
-		auto * app = ToolsManager::toolsManager->app;
-		if (app->activeFile == nullptr) return;
-		COORD position = record.Event.MouseEvent.dwMousePosition;
-		DWORD writen;
-
-		tmp.color = ToolsManager::toolsManager->getPickedColor();
-		tmp.znak = ToolsManager::toolsManager->getPickedChar();
-
-		if (app->isMouseOnCanvas(position))
+		if (event.mouseEvent.isKeyJustPressed(MouseKeys::LeftButton) || 
+			event.mouseEvent.isKeyJustPressed(MouseKeys::RightButton))
 		{
-			if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED){
-				app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x] = tmp; // y / x
-			}
-			else if (record.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED){
-				app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x] = cleer_mark; // y / x
-			}
+			currentHistory = HistoryManager::instance->makeVectorMarkHistory();
 		}
-		else
-		{
-			return;
+	}
+}
+
+void Tool_Brush::update()
+{
+	auto * app = ToolsManager::toolsManager->app;
+	if (app->activeFile == nullptr) return;
+	COORD position = Mouse::instance->position;
+	DWORD writen;
+
+	tmp.color = ToolsManager::toolsManager->getPickedColor();
+	tmp.znak = ToolsManager::toolsManager->getPickedChar();
+
+	if (app->isMouseOnCanvas(position))
+	{
+		if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton)){
+			Mark * tmpMark = &app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x]; // y / x
+			currentHistory->saveMark(tmpMark, *tmpMark);
+			*tmpMark = tmp; 
+		}
+		else if (Mouse::instance->isKeyPressed(MouseKeys::RightButton)){
+			Mark * tmpMark = &app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x]; // y / x
+			currentHistory->saveMark(tmpMark, *tmpMark);
+			*tmpMark = cleer_mark;
 		}
 	}
 }

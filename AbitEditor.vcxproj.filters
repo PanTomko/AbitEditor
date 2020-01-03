@@ -88,9 +88,6 @@
     <ClInclude Include="Include\Tool_Brush.h">
       <Filter>Include\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Tool_Picker.h">
-      <Filter>Include\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Include\ToolOption.h">
       <Filter>Include\Core</Filter>
     </ClInclude>
@@ -132,6 +129,21 @@
     </ClInclude>
     <ClInclude Include="Include\KeyboardEvent.h">
       <Filter>Include\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mouse.h">
+      <Filter>Include\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\MouseEvent.h">
+      <Filter>Include\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\VectorMarkHistory.h">
+      <Filter>Include\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Tool_Bucket.h">
+      <Filter>Include\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Tool_Picker.h">
+      <Filter>Include\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +225,18 @@
     </ClCompile>
     <ClCompile Include="Src\KeyboardEvent.cpp">
       <Filter>Src\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Mouse.cpp">
+      <Filter>Src\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MouseEvent.cpp">
+      <Filter>Src\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\VectorMarkHistory.cpp">
+      <Filter>Src\History</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Tool_Bucket.cpp">
+      <Filter>Src\Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

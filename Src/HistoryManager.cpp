@@ -9,8 +9,6 @@ HistoryManager * HistoryManager::instance = new HistoryManager();
 HistoryManager::HistoryManager()
 {
 	ID = 0;
-	zJustPressed = false;
-	zPressed = false;
 }
 
 HistoryManager::~HistoryManager()
@@ -38,34 +36,27 @@ void HistoryManager::saveHistory(Mark * varr, Mark value)
 	save(history);
 }
 
+VectorMarkHistory * HistoryManager::makeVectorMarkHistory()
+{
+	VectorMarkHistory* history = new VectorMarkHistory();
+	history->ID = ID;
+	save(history);
+	return history;
+}
+
 void HistoryManager::save(History * history)
 {
 	s_History.push(history);
 }
 
-void HistoryManager::update(const INPUT_RECORD & record)
+void HistoryManager::input( Event & event )
 {
-	if (s_History.empty()) return;
-
-	if	(record.EventType == KEY_EVENT )
+	if ( event.event_type == Event::Type::Keyboard)
 	{
+		if (event.keyboardEvent.isKeyJustPressed(Key::Z))
+		{	
+			if (s_History.empty()) return;
 
-		if (record.Event.KeyEvent.wVirtualKeyCode == L'Z')
-		{
-			zJustPressed = false;
-
-			if (record.Event.KeyEvent.bKeyDown == true && zPressed == false)
-			{
-				zJustPressed = true;
-				zPressed = true;
-			}
-
-			if (record.Event.KeyEvent.bKeyDown == false && zPressed == true) zPressed = false;
-		}
-
-		if (zJustPressed == true)
-		{
-			
 			History * last = s_History.top();
 			s_History.pop();
 

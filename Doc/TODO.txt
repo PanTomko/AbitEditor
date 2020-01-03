@@ -1,10 +1,13 @@
-[] Restructure project ! 
+[X] Restructure project ! 
 
-[] Add History
-   [] add history manager
-   [] add history to picker
-   [] add history to brush
-   [] add shorcuts for backing, forwarding in history
+[] Make adding ".bitA" optional in command "new-file"
+
+[X] Add History
+   [X] add history manager
+   [X] add history to picker
+   [X] add history to brush
+   [X] add shorcuts for backing, forwarding in history
+   [X] make possible to save multiple marks change at once ( for brush strickes and bucket fill erasing etc.)
 
 [] Create bucket tool
 	[] create tool
@@ -22,5 +25,5 @@ Commands
 
 [X] add x/y of mouse position relative to canvas
 
-[] Add cutom cursor for comand line
+[X] Add cutom cursor for comand line
 

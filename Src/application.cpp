@@ -3,6 +3,7 @@
 #include "CommandLine.h"
 #include "HistoryManager.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 // Macro for _setmode
 #include <io.h>
@@ -37,6 +38,7 @@ Application::Application()
 		CONSOLE_TEXTMODE_BUFFER,
 		NULL
 	);
+
 
 	windowSize = new SMALL_RECT{ 0 , 0 , 120 , 30 };
 
@@ -106,6 +108,13 @@ Application::Application()
 	ToolsManager::toolsManager->app = this;
 
 	running = true;
+
+	// non valid chars 
+	nonValid = { Key::Alt, Key::Shift, Key::Ctrl, Key::Backspace,
+							 Key::CapsLock, Key::Clear, Key::Delete, Key::Enter,
+							 Key::DownArrow, Key::RightArrow, Key::LeftArrow, Key::UpArrow,
+							 Key::Escape, Key::Help, Key::Home, Key::Tab, Key::Insert,
+							 Key::PrintSreen, Key::PageDown, Key::PageUP };
 }
 
 Application::~Application()
@@ -133,7 +142,7 @@ inline std::wstring convert(const std::string& as)
 
 void Application::run()
 {
-	thread_input = std::thread(&Application::readInputEvents, this); // Start accumulating events !
+	thread_input = std::thread(&Application::readInputEvents); // Start accumulating events !
 
 	while (running)
 	{
@@ -149,10 +158,7 @@ void Application::run()
 
 void Application::update()
 {
-	//ToolsManager::toolsManager->update(inputBuffer[i]);
-	//if(!CommandLine::instance->active) HistoryManager::instance->update(inputBuffer[i]);
-	//updateCanvas(inputBuffer[i]);
-	//CommandLine::instance->update(inputBuffer[i]);
+	ToolsManager::toolsManager->update();
 }
 
 void Application::draw()
@@ -169,10 +175,10 @@ void Application::input()
 
 	while (poolEvent(_event))
 	{
-		if (_event.event_type == Event::Type::Keyboard && _event.keyboardEvent.isKey(Key::Shift))
-			CommandLine::instance->comandBuffor += convert(std::bitset<3>(_event.keyboardEvent.keyState).to_string()) + L":";
-		//else
-			//CommandLine::instance->comandBuffor = L"";
+		CommandLine::instance->input(_event);
+		ToolsManager::toolsManager->input(_event);
+		if (!CommandLine::instance->active) HistoryManager::instance->input(_event);
+		inputCanvas(_event);
 	}
 }
 
@@ -242,20 +248,24 @@ void Application::readInputEvents()
 		ReadConsoleInputW(
 			consoleInput,
 			inputBuffer,
-			1024,
+			254,
 			&ic);
 
 		mutex_evetsBuffer.lock();
 		for (unsigned int i = 0; i < ic; i++)
 		{
+			Event _event;
+
 			switch (inputBuffer[i].EventType)
 			{
 				case KEY_EVENT:
-					Event _event;
+				{
 					_event.event_type = Event::Type::Keyboard;
 					_event.keyboardEvent.key = static_cast<Key>(inputBuffer[i].Event.KeyEvent.wVirtualKeyCode);
 					_event.keyboardEvent.repeatCount = inputBuffer[i].Event.KeyEvent.wRepeatCount;
-					_event.keyboardEvent.unicode = inputBuffer[i].Event.KeyEvent.uChar.UnicodeChar;
+
+					wchar_t tmpWCT = inputBuffer[i].Event.KeyEvent.uChar.UnicodeChar;
+					_event.keyboardEvent.unicode = isValidCharacter(_event.keyboardEvent.key) ? tmpWCT : L'\0';
 
 					if (Keyboard::instance->keys.find(_event.keyboardEvent.key) == Keyboard::instance->keys.end()) {
 						Keyboard::instance->keys[_event.keyboardEvent.key] = 0b000u; // Key not found so make one
@@ -275,20 +285,85 @@ void Application::readInputEvents()
 
 					_event.keyboardEvent.keyState = Keyboard::instance->keys[_event.keyboardEvent.key];
 					evetsBuffer.push(_event);
-					
-					if (Keyboard::instance->keys[_event.keyboardEvent.key] & 0b010 ) {
+
+					if (Keyboard::instance->keys[_event.keyboardEvent.key] & 0b010) {
 						Keyboard::instance->keys[_event.keyboardEvent.key] &= ~(1UL << 1);
 					}
 
 					if (Keyboard::instance->keys[_event.keyboardEvent.key] & 0b100) {
 						Keyboard::instance->keys[_event.keyboardEvent.key] &= ~(1UL << 2);
 					}
+
+				}
+				break;
+
+				case MOUSE_EVENT:
+				{
+					_event.event_type = Event::Type::Mouse;
+					_event.mouseEvent.position = inputBuffer[i].Event.MouseEvent.dwMousePosition;
+					Mouse::instance->position = inputBuffer[i].Event.MouseEvent.dwMousePosition;
+					_event.mouseEvent.key = MouseKeys::Null;
+
+					std::bitset<3>set = inputBuffer[i].Event.MouseEvent.dwButtonState;
 					
-					break;
+					for (auto & j : Mouse::instance->keys) {
+
+						std::bitset<3>testedKey = static_cast<unsigned int>(j.first);
+						std::bitset<3>testedKeyStatus = static_cast<unsigned int>(j.second);
+
+						if (set.to_ulong() & testedKey.to_ulong()) {
+							
+							if (testedKeyStatus[0] == 0)
+							{
+								testedKeyStatus[2] = 1;
+
+								_event.mouseEvent.keyState = testedKeyStatus.to_ulong();
+								_event.mouseEvent.key = j.first;
+								j.second = testedKeyStatus.to_ulong();
+								evetsBuffer.push(_event);
+								
+								testedKeyStatus[2] = 0;
+							}
+
+							testedKeyStatus[0] = 1;
+							
+						}
+						else {
+							if (testedKeyStatus[0] == 1)
+							{
+								testedKeyStatus[1] = 1;
+
+								_event.mouseEvent.keyState = testedKeyStatus.to_ulong();
+								_event.mouseEvent.key = j.first;
+								j.second = testedKeyStatus.to_ulong();
+								evetsBuffer.push(_event);
+								
+								testedKeyStatus[1] = 0;
+							}
+
+							testedKeyStatus[0] = 0;
+						}
+						j.second = testedKeyStatus.to_ulong(); // save mouse status in Mouse::instance
+					}
+				}
+				break;
 			}
 		}
 		mutex_evetsBuffer.unlock();
 	}
+}
+
+bool Application::isValidCharacter(const Key & key)
+{
+
+	for (auto & i : nonValid)
+	{
+		if (key == i) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Application::drawLaout()
@@ -367,27 +442,24 @@ void Application::drawCanvas()
 	}
 }
 
-void Application::updateCanvas(const INPUT_RECORD & record)
+void Application::inputCanvas( Event & event )
 {
-	// 37/40 - arows
-
-	if (record.EventType == KEY_EVENT && !CommandLine::instance->active) {
-		KEY_EVENT_RECORD key = record.Event.KeyEvent;
+	if (event.event_type == Event::Type::Keyboard && !CommandLine::instance->active) {
 
 		if (activeFile != nullptr) {
-			if (key.wVirtualKeyCode == 39 && filePos.x + 1 < activeFile->size_x - maxDraw.x ) {
+			if (event.keyboardEvent.isKeyPressed(Key::RightArrow) && filePos.x + 1 < activeFile->size_x - maxDraw.x ) {
 				filePos.x++;
 			}
 			
-			if (key.wVirtualKeyCode == 37 && filePos.x - 1 >= 0) {
+			if (event.keyboardEvent.isKeyPressed(Key::LeftArrow) == 37 && filePos.x - 1 >= 0) {
 				filePos.x--;
 			}
 			
-			if (key.wVirtualKeyCode == 38 && filePos.y - 1 >= 0) {
+			if (event.keyboardEvent.isKeyPressed(Key::UpArrow) && filePos.y - 1 >= 0) {
 				filePos.y--;
 			}
 
-			if (key.wVirtualKeyCode == 40 && filePos.y + 1 < activeFile->size_y - maxDraw.y) {
+			if (event.keyboardEvent.isKeyPressed(Key::DownArrow) == 40 && filePos.y + 1 < activeFile->size_y - maxDraw.y) {
 				filePos.y++;
 			}
 		}
@@ -398,12 +470,12 @@ bool Application::loadBitA(std::wstring path)
 {
 	BitA * bitAFile;
 
-	delete activeFile;
-
 	std::fstream file(path);
 
-	if(!file.good())
-		std::wcout << "HMM" << std::endl;
+	if (!file.good())
+		return false;
+
+	delete activeFile;
 
 	// load size
 	int sizeX, sizeY;

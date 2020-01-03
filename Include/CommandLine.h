@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.h"
+#include "Event.h"
 
 #include <windows.h>
 #include <string>
@@ -19,6 +20,9 @@ class CommandLine {
 	wchar_t activeChar;
 	wchar_t unActiveChar;
 
+	int keyRepeatCount;
+	Key lastKey;
+
 	void get_parm();
 
 public:
@@ -35,7 +39,7 @@ public:
 	bool active;
 
 	void execute_comand();
-	void update(const INPUT_RECORD & record);
+	void input(Event & event);
 	void draw( HANDLE & output );
 
 	CommandLine(CommandLine & Obj) = delete;

@@ -13,21 +13,15 @@ CharTable::~CharTable()
 
 void CharTable::calculateChars()
 {
-	//system("cls");
 	for (Range & r : chars_ranges) 
 	{
 		do {
-			
 			wchar_t tested = (wchar_t)r.on_nr;
-
-			//std::wcout << tested << L", ";
 			if (IsCharacterAvailableInFont(TEXT("Consolas"), tested)) chars.push_back(tested);
 		} while (r.getNext() != -1);
 
 		chars.push_back(L'\0');
-		//system("pause");
-	}
-	
+	}	
 }
 
 bool CharTable::IsCharacterAvailableInHDC(HDC hdc, wchar_t & character)

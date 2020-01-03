@@ -35,6 +35,8 @@
     <ClInclude Include="Include\Keyboard.h" />
     <ClInclude Include="Include\KeyboardEvent.h" />
     <ClInclude Include="Include\MarkHistory.h" />
+    <ClInclude Include="Include\Mouse.h" />
+    <ClInclude Include="Include\MouseEvent.h" />
     <ClInclude Include="Include\Range.h" />
     <ClInclude Include="Include\Tool.h" />
     <ClInclude Include="Include\ToolOption.h" />
@@ -42,8 +44,10 @@
     <ClInclude Include="Include\ToolOptionColor.h" />
     <ClInclude Include="Include\ToolsManager.h" />
     <ClInclude Include="Include\Tool_Brush.h" />
+    <ClInclude Include="Include\Tool_Bucket.h" />
     <ClInclude Include="Include\Tool_Picker.h" />
     <ClInclude Include="Include\Vector2D.h" />
+    <ClInclude Include="Include\VectorMarkHistory.h" />
     <ClInclude Include="Include\WcharHistory.h" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +68,8 @@
     <ClCompile Include="Src\KeyboardEvent.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\MarkHistory.cpp" />
+    <ClCompile Include="Src\Mouse.cpp" />
+    <ClCompile Include="Src\MouseEvent.cpp" />
     <ClCompile Include="Src\Range.cpp" />
     <ClCompile Include="Src\Tool.cpp" />
     <ClCompile Include="Src\ToolOption.cpp" />
@@ -71,8 +77,10 @@
     <ClCompile Include="Src\ToolOptionColor.cpp" />
     <ClCompile Include="Src\ToolsManager.cpp" />
     <ClCompile Include="Src\Tool_Brush.cpp" />
+    <ClCompile Include="Src\Tool_Bucket.cpp" />
     <ClCompile Include="Src\Tool_Picker.cpp" />
     <ClCompile Include="Src\Vector2D.cpp" />
+    <ClCompile Include="Src\VectorMarkHistory.cpp" />
     <ClCompile Include="Src\WcharHistory.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -153,7 +161,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\King Tomko\Desktop\C++\AbitEditor\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

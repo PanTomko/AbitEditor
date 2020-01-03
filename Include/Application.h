@@ -2,6 +2,7 @@
 #include "BitA.h"
 #include "Vector2D.h"
 #include "Event.h"
+#include "KeyboardEvent.h"
 
 #include <string>
 #include <windows.h>
@@ -28,7 +29,7 @@ public:
 	std::wstring layout;
 
 	DWORD d, ic;
-	INPUT_RECORD inputBuffer[1024];
+	INPUT_RECORD inputBuffer[254];
 	SMALL_RECT * windowSize;
 
 	BitA * activeFile;
@@ -47,16 +48,18 @@ public:
 	void clean();	// Clean buffer
 
 	// Events stuff 
-	bool poolEvent( Event & _event );	// true if any event was "pooled"
-	std::thread thread_input;			// Works with input
-	void readInputEvents();				// Reads input in thread_input
-	std::queue<Event>evetsBuffer;		// Contains events form thread_input
-	std::mutex mutex_evetsBuffer;		// Block acces to evetsBuffer
-
+	bool poolEvent( Event & _event );				// true if any event was "pooled"
+	std::thread thread_input;						// Works with input
+	void readInputEvents();							// Reads input in thread_input
+	std::queue<Event>evetsBuffer;					// Contains events form thread_input
+	std::mutex mutex_evetsBuffer;					// Block acces to evetsBuffer
+	
+	bool isValidCharacter( const Key & key );		// Check if character hasform by filtring control keys
+	std::vector<Key>nonValid;						// Non valid keys
 
 	void drawLaout();
 	void drawCanvas();		// Draws activeFile
-	void updateCanvas( const INPUT_RECORD & record);
+	void inputCanvas( Event & event );
 	bool isMouseOnCanvas(COORD & mouse_position);
 
 	bool loadBitA( std::wstring path );

@@ -1,5 +1,6 @@
 #pragma once
 #include "ToolOption.h"
+#include "Event.h"
 
 #include <string>
 #include <windows.h>
@@ -12,7 +13,8 @@ public:
 	std::wstring name;
 	std::vector<ToolOption*>options;
 
-	virtual void update( INPUT_RECORD & record ){};
+	virtual void input( Event & event ){};
+	virtual void update() {};
 
 	Tool( std::wstring name );
 	virtual ~Tool();

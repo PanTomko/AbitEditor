@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "CommandLine.h"
 #include "HistoryManager.h"
+#include "Keyboard.h"
 
 #include "Tool_Brush.h"
 #include "Tool_Picker.h"
@@ -162,28 +163,27 @@ void ToolsManager::draw()
 	
 }
 
-void ToolsManager::update(INPUT_RECORD & record)
+void ToolsManager::input(Event & event)
 {
-	if (record.EventType == MOUSE_EVENT)
+	if (event.event_type == Event::Type::Mouse)
 	{
-
 		// update x/y on end of tool menu
-		if (app->isMouseOnCanvas(record.Event.MouseEvent.dwMousePosition)) {
+		if (app->isMouseOnCanvas(event.mouseEvent.position)) {
 			show_xy = true;
 
-			mouse_position_RTC.x = record.Event.MouseEvent.dwMousePosition.X - app->drawingPos.x + app->filePos.x;
-			mouse_position_RTC.y = record.Event.MouseEvent.dwMousePosition.Y - app->drawingPos.y + app->filePos.y;
+			mouse_position_RTC.x = event.mouseEvent.position.X - app->drawingPos.x + app->filePos.x;
+			mouse_position_RTC.y = event.mouseEvent.position.Y - app->drawingPos.y + app->filePos.y;
 
 		}
 		else {
 			show_xy = false;
 		}
 
-		if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+		if (event.mouseEvent.isKeyJustRelased(MouseKeys::LeftButton))
 		{
-			if (record.Event.MouseEvent.dwMousePosition.Y == 1 && 
-				record.Event.MouseEvent.dwMousePosition.X > 1 &&
-				record.Event.MouseEvent.dwMousePosition.X < 3 + menuBuffor.length())
+			if (event.mouseEvent.position.Y == 1 &&
+				event.mouseEvent.position.X > 1 &&
+				event.mouseEvent.position.X < 3 + menuBuffor.length())
 			{
 				
 				int start_position;
@@ -194,8 +194,8 @@ void ToolsManager::update(INPUT_RECORD & record)
 					start_position = menuBuffor.find(i->name) + 2;
 					end_position = start_position + i->name.length();
 
-					if (record.Event.MouseEvent.dwMousePosition.X > start_position &&
-						record.Event.MouseEvent.dwMousePosition.X <= end_position)
+					if (event.mouseEvent.position.X > start_position &&
+						event.mouseEvent.position.X <= end_position)
 					{
 						if (activeTool != i)
 						{
@@ -206,9 +206,9 @@ void ToolsManager::update(INPUT_RECORD & record)
 				}
 			}
 
-			if (record.Event.MouseEvent.dwMousePosition.Y == 3 &&
-				record.Event.MouseEvent.dwMousePosition.X > 82 &&
-				record.Event.MouseEvent.dwMousePosition.X < 82 + optionsBuffer.length() &&
+			if (event.mouseEvent.position.Y == 3 &&
+				event.mouseEvent.position.X > 82 &&
+				event.mouseEvent.position.X < 82 + optionsBuffer.length() &&
 				activeTool != nullptr)
 			{
 				int start_position;
@@ -219,8 +219,8 @@ void ToolsManager::update(INPUT_RECORD & record)
 					start_position = optionsBuffer.find(i->name) + 82;
 					end_position = start_position + i->name.length();
 
-					if (record.Event.MouseEvent.dwMousePosition.X > start_position &&
-						record.Event.MouseEvent.dwMousePosition.X <= end_position)
+					if (event.mouseEvent.position.X > start_position &&
+						event.mouseEvent.position.X <= end_position)
 					{
 						if (activeOption != i)
 						{
@@ -233,30 +233,28 @@ void ToolsManager::update(INPUT_RECORD & record)
 	}
 
 	// Shortcuts
-	if (record.EventType == KEY_EVENT && !CommandLine::instance->active)
+	if (event.event_type == Event::Type::Keyboard && !CommandLine::instance->active)
 	{
 		Tool * new_tool = nullptr;
 
-		switch (record.Event.KeyEvent.wVirtualKeyCode) 
+		switch (event.keyboardEvent.key) 
 		{
 			// Brush
-			case L'B': 
-			case L'1': 
+			case Key::B: 
+			case Key::Num1:
 				new_tool = tools[0];
 					break;
 			
 			// Picker
-			case L'P': 
-			case L'2':
+			case Key::P:
+			case Key::Num2:
 				new_tool = tools[1];
 				break;
 
 			// Saving
-			case L'S':
-				if (record.Event.KeyEvent.dwControlKeyState & RIGHT_CTRL_PRESSED ||
-					record.Event.KeyEvent.dwControlKeyState & LEFT_CTRL_PRESSED)
+			case Key::S:
+				if (Keyboard::instance->keys[Key::Ctrl] & 0b001 )
 				{
-					//std::wstring tmp_command_buffer = CommandLine::instance->comandBuffor;
 					CommandLine::instance->comandBuffor = L"save";
 					CommandLine::instance->execute_comand();
 					CommandLine::instance->comandBuffor = L"log->saved";
@@ -274,10 +272,20 @@ void ToolsManager::update(INPUT_RECORD & record)
 	}
 
 	if (activeTool != nullptr) {
-		activeTool->update(record);
+		activeTool->input(event);
 		
 		if( activeOption != nullptr )
-			activeOption->update(record);
+			activeOption->input(event);
+	}
+}
+
+void ToolsManager::update()
+{
+	if (activeTool != nullptr) {
+		activeTool->update();
+
+		if (activeOption != nullptr)
+			activeOption->update();
 	}
 }
 

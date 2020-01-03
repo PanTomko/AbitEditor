@@ -1,5 +1,6 @@
 #pragma once
 #include "KeyboardEvent.h"
+#include "MouseEvent.h"
 
 class Event
 {
@@ -12,6 +13,7 @@ public:
 
 	Type event_type;
 	KeyboardEvent keyboardEvent;
+	MouseEvent mouseEvent;
 
 	Event();
 	~Event();

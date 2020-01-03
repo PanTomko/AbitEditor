@@ -1,6 +1,8 @@
 #pragma once
 #include "History.h"
 #include "BitA.h"
+#include "Event.h"
+#include "VectorMarkHistory.h"
 
 #include <stack>
 #include <windows.h>
@@ -17,12 +19,11 @@ public:
 	void saveHistory(wchar_t * varr, wchar_t value);
 	void saveHistory(Mark * varr, Mark value);
 
+	VectorMarkHistory* makeVectorMarkHistory();
+
 	void save(History* history);
 
-	bool zJustPressed;
-	bool zPressed;
-
-	void update(const INPUT_RECORD & record);
+	void input( Event & event);
 
 	int getID();
 

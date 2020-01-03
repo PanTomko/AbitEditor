@@ -2,6 +2,7 @@
 #include "Tool.h"
 #include "ToolOption.h"
 #include "Vector2D.h"
+#include "Event.h"
 
 #include <vector>
 #include <windows.h>
@@ -24,7 +25,8 @@ public:
 	void setPickedChar(const wchar_t & wchar);
 
 	void draw();
-	void update(INPUT_RECORD & record);
+	void input(Event & event);
+	void update();
 
 private:
 	std::vector<Tool*>tools;

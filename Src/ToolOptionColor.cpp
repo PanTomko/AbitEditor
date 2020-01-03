@@ -3,6 +3,7 @@
 #include "ToolOptionColor.h"
 #include "ToolsManager.h"
 #include "Application.h"
+#include "Mouse.h"
 
 ToolOptionColor::ToolOptionColor() : ToolOption( L" Color " )
 {
@@ -15,12 +16,17 @@ ToolOptionColor::~ToolOptionColor()
 {
 }
 
-void ToolOptionColor::update(INPUT_RECORD & record)
+void ToolOptionColor::input(Event & event)
 {
-	if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+
+}
+
+void ToolOptionColor::update()
+{
+	if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton))
 	{
 		// X - 84/116   Y - 5/19
-		COORD mouse = record.Event.MouseEvent.dwMousePosition;
+		COORD mouse = Mouse::instance->position;
 		wchar_t tmp;
 		
 		if (mouse.X >= 84 && mouse.X <= 116 && mouse.Y >= 5 && mouse.Y <= 19)

@@ -4,6 +4,7 @@
 #include "ToolOption.h"
 #include "ToolOptionColor.h"
 #include "ToolOptionCharTable.h"
+#include "VectorMarkHistory.h"
 
 class Tool_Brush : public Tool
 {
@@ -13,8 +14,10 @@ public:
 
 	ToolOptionColor color;
 	ToolOptionCharTable wcharTable;
+	VectorMarkHistory* currentHistory;
 
-	void update(INPUT_RECORD & record) override;
+	void input( Event & event ) override;
+	void update() override;
 
 	Tool_Brush();
 	~Tool_Brush();

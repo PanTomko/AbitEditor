@@ -2,7 +2,7 @@
 #include "Tool.h"
 #include "ToolOptionColor.h"
 
-class Tool_Picker : public Tool
+class Tool_Bucket : public Tool
 {
 public:
 
@@ -13,7 +13,6 @@ public:
 	WORD picked_color;
 	ToolOptionColor color;
 
-	Tool_Picker();
-	~Tool_Picker();
+	Tool_Bucket();
+	~Tool_Bucket();
 };
-

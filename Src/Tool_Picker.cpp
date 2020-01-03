@@ -1,6 +1,7 @@
 #include "Tool_Picker.h"
 #include "ToolsManager.h"
 #include "Application.h"
+#include "Mouse.h"
 
 Tool_Picker::Tool_Picker() : Tool(L" Picker ")
 {
@@ -11,17 +12,22 @@ Tool_Picker::~Tool_Picker()
 {
 }
 
-void Tool_Picker::update(INPUT_RECORD & record)
+void Tool_Picker::input(Event & event)
+{
+
+}
+
+void Tool_Picker::update()
 {
 	wchar_t wchar;
 	unsigned short color;
 	auto * app = ToolsManager::toolsManager->app;
-	COORD position = record.Event.MouseEvent.dwMousePosition;
+	COORD position = Mouse::instance->position;
 	unsigned long writen;
 	
 	if (app->isMouseOnCanvas(position))
 	{
-		if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+		if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton)) {
 			ReadConsoleOutputCharacterW(
 				*app->consoleOutput,
 				&wchar,
@@ -32,7 +38,7 @@ void Tool_Picker::update(INPUT_RECORD & record)
 			ToolsManager::toolsManager->setPickedChar(wchar);
 		}
 
-		if (record.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED) {
+		if (Mouse::instance->isKeyPressed(MouseKeys::RightButton)) {
 			ReadConsoleOutputAttribute(
 				*app->consoleOutput,
 				&color,

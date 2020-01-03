@@ -1,6 +1,7 @@
 ﻿#include "ToolOptionCharTable.h"
 #include "ToolsManager.h"
 #include "Application.h"
+#include "Mouse.h"
 
 #include <iostream>
 #include <windows.h>
@@ -123,11 +124,40 @@ void ToolOptionCharTable::draw(HANDLE * consoleOutput)
 	}
 }
 
-void ToolOptionCharTable::update(INPUT_RECORD & record)
+void ToolOptionCharTable::input(Event & event)
 {
-	if (record.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+	if (event.event_type == Event::Type::Mouse)
 	{
-		COORD mous_position = record.Event.MouseEvent.dwMousePosition;
+		if (event.mouseEvent.isKeyJustRelased(MouseKeys::LeftButton))
+		{
+			auto & app = ToolsManager::toolsManager->app;
+			wchar_t tmp;
+
+			if (event.mouseEvent.position.Y == 5 && event.mouseEvent.position.X >= 83 && event.mouseEvent.position.X <= 118)
+			{
+				ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, event.mouseEvent.position, &writen);
+				if (tmp == L'<') {
+					menu_position--;
+					if (menu_position < 0)
+						menu_position = charTables.size() - 1;
+				}
+				else if (tmp == L'>') {
+					menu_position++;
+					if (menu_position > charTables.size() - 1)
+						menu_position = 0;
+				}
+
+				activeCharTable = charTables[menu_position];
+			}
+		}
+	}
+}
+
+void ToolOptionCharTable::update()
+{
+	if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton))
+	{
+		COORD mous_position = Mouse::instance->position;
 		auto & app = ToolsManager::toolsManager->app;
 		wchar_t tmp;
 
@@ -136,22 +166,6 @@ void ToolOptionCharTable::update(INPUT_RECORD & record)
 			if (tmp != L' ') {
 				ToolsManager::toolsManager->setPickedChar(tmp);
 			}	
-		}
-
-		if (mous_position.Y == 5 && mous_position.X >= 83 && mous_position.X <= 118){
-			ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, mous_position, &writen);
-			if (tmp == L'<') {
-				menu_position--;
-				if (menu_position < 0)
-					menu_position = charTables.size() - 1;
-			}
-			else if (tmp == L'>') {
-				menu_position++;
-				if (menu_position > charTables.size() - 1)
-					menu_position = 0;
-			}
-
-			activeCharTable = charTables[menu_position];
 		}
 	}
 }

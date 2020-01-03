@@ -3,7 +3,8 @@
 class ToolOptionColor : public ToolOption
 {
 public:
-	void update(INPUT_RECORD & record) override;
+	void update() override;
+	void input(Event & event) override;
 	void draw(HANDLE * consoleOutput) override;
 
 	wchar_t * znak;
