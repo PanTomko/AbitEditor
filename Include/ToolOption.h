@@ -11,8 +11,8 @@ class ToolOption
 public:
 	std::wstring name;
 
-	virtual void input( Event & event ) = 0;
-	virtual void update() = 0;
+	virtual void input( sc::Event & event ) = 0;
+	virtual void update(float delta) = 0;
 	virtual void draw( HANDLE * consoleOutput ) = 0;
 
 	ToolOption( std::wstring name);

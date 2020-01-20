@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Application.h" />
-    <ClInclude Include="Include\BitA.h" />
+    <ClInclude Include="Include\Canvas.h" />
     <ClInclude Include="Include\CharTable.h" />
     <ClInclude Include="Include\ColorHistory.h" />
     <ClInclude Include="Include\Command.h" />
@@ -29,15 +29,11 @@
     <ClInclude Include="Include\Command_NewFile.h" />
     <ClInclude Include="Include\Command_Save.h" />
     <ClInclude Include="Include\Command_SaveAs.h" />
-    <ClInclude Include="Include\Event.h" />
     <ClInclude Include="Include\History.h" />
     <ClInclude Include="Include\HistoryManager.h" />
-    <ClInclude Include="Include\Keyboard.h" />
-    <ClInclude Include="Include\KeyboardEvent.h" />
     <ClInclude Include="Include\MarkHistory.h" />
-    <ClInclude Include="Include\Mouse.h" />
-    <ClInclude Include="Include\MouseEvent.h" />
     <ClInclude Include="Include\Range.h" />
+    <ClInclude Include="Include\SceneApp.h" />
     <ClInclude Include="Include\Tool.h" />
     <ClInclude Include="Include\ToolOption.h" />
     <ClInclude Include="Include\ToolOptionCharTable.h" />
@@ -46,13 +42,12 @@
     <ClInclude Include="Include\Tool_Brush.h" />
     <ClInclude Include="Include\Tool_Bucket.h" />
     <ClInclude Include="Include\Tool_Picker.h" />
-    <ClInclude Include="Include\Vector2D.h" />
     <ClInclude Include="Include\VectorMarkHistory.h" />
     <ClInclude Include="Include\WcharHistory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\application.cpp" />
-    <ClCompile Include="Src\BitA.cpp" />
+    <ClCompile Include="Src\Canvas.cpp" />
     <ClCompile Include="Src\CharTable.cpp" />
     <ClCompile Include="Src\ColorHistory.cpp" />
     <ClCompile Include="Src\Command.cpp" />
@@ -61,16 +56,12 @@
     <ClCompile Include="Src\Command_NewFile.cpp" />
     <ClCompile Include="Src\Command_Save.cpp" />
     <ClCompile Include="Src\Command_SaveAs.cpp" />
-    <ClCompile Include="Src\Event.cpp" />
     <ClCompile Include="Src\History.cpp" />
     <ClCompile Include="Src\HistoryManager.cpp" />
-    <ClCompile Include="Src\Keyboard.cpp" />
-    <ClCompile Include="Src\KeyboardEvent.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\MarkHistory.cpp" />
-    <ClCompile Include="Src\Mouse.cpp" />
-    <ClCompile Include="Src\MouseEvent.cpp" />
     <ClCompile Include="Src\Range.cpp" />
+    <ClCompile Include="Src\SceneApp.cpp" />
     <ClCompile Include="Src\Tool.cpp" />
     <ClCompile Include="Src\ToolOption.cpp" />
     <ClCompile Include="Src\ToolOptionCharTable.cpp" />
@@ -79,7 +70,6 @@
     <ClCompile Include="Src\Tool_Brush.cpp" />
     <ClCompile Include="Src\Tool_Bucket.cpp" />
     <ClCompile Include="Src\Tool_Picker.cpp" />
-    <ClCompile Include="Src\Vector2D.cpp" />
     <ClCompile Include="Src\VectorMarkHistory.cpp" />
     <ClCompile Include="Src\WcharHistory.cpp" />
   </ItemGroup>
@@ -134,7 +124,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\Pan Tomko\Desktop\Projects\SimpleConsoleEngine\SimpleConsoleEngine;C:\Users\Pan Tomko\Desktop\Projects\SimpleConsole\SimpleConsole\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -162,10 +154,13 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>SimpleConsole.lib;SimpleConsoleEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Pan Tomko\Desktop\Projects\SimpleConsole\Release;C:\Users\Pan Tomko\Desktop\Projects\SimpleConsoleEngine\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

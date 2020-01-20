@@ -1,18 +1,18 @@
 #pragma once
 #include "History.h"
-#include "BitA.h"
+#include <BitA.h>
 
 class MarkHistory : public History
 {
 public:
 
-	Mark* varr;
-	Mark value;
+	sc::Mark* varr;
+	sc::Mark value;
 
 	void reverse() override;
 
 
-	MarkHistory(Mark* varr, Mark value);
+	MarkHistory(sc::Mark* varr, sc::Mark value);
 	~MarkHistory();
 };
 

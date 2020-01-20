@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include "Command.h"
 #include "Event.h"
 
@@ -46,3 +46,4 @@ public:
 	~CommandLine();
 };
 
+*/

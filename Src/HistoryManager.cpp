@@ -29,7 +29,7 @@ void HistoryManager::saveHistory(wchar_t * varr, wchar_t value)
 	save(history);
 }
 
-void HistoryManager::saveHistory(Mark * varr, Mark value)
+void HistoryManager::saveHistory(sc::Mark * varr, sc::Mark value)
 {
 	MarkHistory * history{ new MarkHistory(varr, value) };
 	history->ID = ID;
@@ -49,11 +49,11 @@ void HistoryManager::save(History * history)
 	s_History.push(history);
 }
 
-void HistoryManager::input( Event & event )
+void HistoryManager::input( sc::Event & event )
 {
-	if ( event.event_type == Event::Type::Keyboard)
+	if ( event.event_type == sc::Event::Type::Keyboard)
 	{
-		if (event.keyboardEvent.isKeyJustPressed(Key::Z))
+		if (event.keyboardEvent.isKeyJustPressed(sc::Key::Z))
 		{	
 			if (s_History.empty()) return;
 

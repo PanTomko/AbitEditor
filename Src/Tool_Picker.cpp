@@ -12,22 +12,22 @@ Tool_Picker::~Tool_Picker()
 {
 }
 
-void Tool_Picker::input(Event & event)
+void Tool_Picker::input(sc::Event & event)
 {
 
 }
 
-void Tool_Picker::update()
+void Tool_Picker::update(float delta)
 {
-	wchar_t wchar;
+	/*wchar_t wchar;
 	unsigned short color;
 	auto * app = ToolsManager::toolsManager->app;
-	COORD position = Mouse::instance->position;
+	COORD position = sc::Mouse::getInstance()->position;
 	unsigned long writen;
 	
 	if (app->isMouseOnCanvas(position))
 	{
-		if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton)) {
+		if (sc::Mouse::getInstance()->isKeyPressed(sc::MouseKeys::LeftButton)) {
 			ReadConsoleOutputCharacterW(
 				*app->consoleOutput,
 				&wchar,
@@ -38,7 +38,7 @@ void Tool_Picker::update()
 			ToolsManager::toolsManager->setPickedChar(wchar);
 		}
 
-		if (Mouse::instance->isKeyPressed(MouseKeys::RightButton)) {
+		if (sc::Mouse::getInstance()->isKeyPressed(sc::MouseKeys::RightButton)) {
 			ReadConsoleOutputAttribute(
 				*app->consoleOutput,
 				&color,
@@ -48,5 +48,5 @@ void Tool_Picker::update()
 
 			ToolsManager::toolsManager->setPickedColor(color);
 		}
-	}
+	}*/
 }

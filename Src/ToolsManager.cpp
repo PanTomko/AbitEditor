@@ -1,5 +1,4 @@
 ﻿#include "ToolsManager.h"
-#include "Application.h"
 #include "CommandLine.h"
 #include "HistoryManager.h"
 #include "Keyboard.h"
@@ -8,6 +7,8 @@
 #include "Tool_Picker.h"
 
 #include <iostream>
+#include <Keyboard.h>
+
 
 ToolsManager * ToolsManager::toolsManager = new ToolsManager();
 
@@ -30,9 +31,9 @@ ToolsManager::~ToolsManager()
 {
 }
 
-void ToolsManager::draw()
+void ToolsManager::draw(sc::Console & console)
 {
-	menuBuffor = L":";
+	/*menuBuffor = L":";
 	for (auto & i : tools)
 	{
 		menuBuffor += i->name + L":";
@@ -160,12 +161,12 @@ void ToolsManager::draw()
 			{ 100, 1 },
 			&writen);
 	}
-	
+	*/
 }
 
-void ToolsManager::input(Event & event)
+void ToolsManager::input(sc::Event & event)
 {
-	if (event.event_type == Event::Type::Mouse)
+	/*if (event.event_type == sc::Event::Type::Mouse)
 	{
 		// update x/y on end of tool menu
 		if (app->isMouseOnCanvas(event.mouseEvent.position)) {
@@ -231,33 +232,33 @@ void ToolsManager::input(Event & event)
 			}
 		}
 	}
-
+	*/
 	// Shortcuts
-	if (event.event_type == Event::Type::Keyboard && !CommandLine::instance->active)
+	if (event.event_type == sc::Event::Type::Keyboard)
 	{
 		Tool * new_tool = nullptr;
 
 		switch (event.keyboardEvent.key) 
 		{
 			// Brush
-			case Key::B: 
-			case Key::Num1:
+			case sc::Key::B: 
+			case sc::Key::Num1:
 				new_tool = tools[0];
 					break;
 			
 			// Picker
-			case Key::P:
-			case Key::Num2:
+			case sc::Key::P:
+			case sc::Key::Num2:
 				new_tool = tools[1];
 				break;
 
 			// Saving
-			case Key::S:
-				if (Keyboard::instance->keys[Key::Ctrl] & 0b001 )
+			case sc::Key::S:
+				if (sc::Keyboard::getInstance()->keys[sc::Key::Ctrl] & 0b001 )
 				{
-					CommandLine::instance->comandBuffor = L"save";
-					CommandLine::instance->execute_comand();
-					CommandLine::instance->comandBuffor = L"log->saved";
+					//CommandLine::instance->comandBuffor = L"save";
+					//CommandLine::instance->execute_comand();
+					//CommandLine::instance->comandBuffor = L"log->saved";
 				}
 				break;
 
@@ -270,7 +271,7 @@ void ToolsManager::input(Event & event)
 			activeOption = activeTool->options.size() > 0 ? activeTool->options[0] : nullptr;
 		}
 	}
-
+	
 	if (activeTool != nullptr) {
 		activeTool->input(event);
 		
@@ -279,13 +280,13 @@ void ToolsManager::input(Event & event)
 	}
 }
 
-void ToolsManager::update()
+void ToolsManager::update(float delta)
 {
 	if (activeTool != nullptr) {
-		activeTool->update();
+		activeTool->update(delta);
 
 		if (activeOption != nullptr)
-			activeOption->update();
+			activeOption->update(delta);
 	}
 }
 

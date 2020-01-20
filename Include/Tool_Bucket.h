@@ -6,8 +6,8 @@ class Tool_Bucket : public Tool
 {
 public:
 
-	void input(Event & event) override;
-	void update() override;
+	void input(sc::Event & event) override;
+	void update(float delta) override;
 
 	wchar_t picked_char;
 	WORD picked_color;

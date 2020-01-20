@@ -1,13 +1,13 @@
 #pragma once
 #include "Tool.h"
 #include "ToolOption.h"
-#include "Vector2D.h"
-#include "Event.h"
 
+#include <Vector2D.h>
 #include <vector>
 #include <windows.h>
+#include <Console.h>
 
-class Application;
+class SceneApp;
 
 // singleton
 class ToolsManager 
@@ -16,7 +16,7 @@ public:
 	~ToolsManager();
 	ToolsManager(const ToolsManager & tool) = delete;
 	static ToolsManager * toolsManager;
-	Application * app;
+	SceneApp * app;
 
 	unsigned short getPickedColor();
 	wchar_t getPickedChar();
@@ -24,9 +24,9 @@ public:
 	void setPickedColor(const unsigned short & color);
 	void setPickedChar(const wchar_t & wchar);
 
-	void draw();
-	void input(Event & event);
-	void update();
+	void draw(sc::Console & console);
+	void input(sc::Event & event);
+	void update(float delta);
 
 private:
 	std::vector<Tool*>tools;
@@ -42,7 +42,7 @@ private:
 	bool show_xy;
 	unsigned long writen;
 
-	Vector2D mouse_position_RTC; // Relative to canvas
+	sc::Vector2D mouse_position_RTC; // Relative to canvas
 
 	ToolsManager();
 };

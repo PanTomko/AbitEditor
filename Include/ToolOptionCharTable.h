@@ -7,8 +7,8 @@ class ToolOptionCharTable : public ToolOption
 public:
 
 	void draw(HANDLE * consoleOutput) override;
-	void update() override;
-	void input( Event & event ) override;
+	void update(float delta) override;
+	void input( sc::Event & event ) override;
 
 
 	DWORD writen;

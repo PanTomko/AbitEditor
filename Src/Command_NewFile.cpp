@@ -14,7 +14,7 @@ Command_NewFile::~Command_NewFile()
 
 void Command_NewFile::execute_command()
 {
-	if (CommandLine::instance->parmeters.size() == 4)
+	/*if (CommandLine::instance->parmeters.size() == 4)
 	{
 		delete CommandLine::instance->app->activeFile;
 
@@ -27,5 +27,5 @@ void Command_NewFile::execute_command()
 		};
 
 		CommandLine::instance->app->activeFile->populate(L' ', 7);
-	}
+	}*/
 }

@@ -7,8 +7,8 @@
 
 void Command_Save::execute_command()
 {
-	if(CommandLine::instance->app->activeFile != nullptr)
-		CommandLine::instance->app->activeFile->save();
+	//if(CommandLine::instance->app->activeFile != nullptr)
+	//	CommandLine::instance->app->activeFile->save();
 }
 
 Command_Save::Command_Save() : Command( L"save", 1 )

@@ -37,28 +37,25 @@
       <UniqueIdentifier>{fb9432fc-25dd-4ffa-b009-e31e3162a556}</UniqueIdentifier>
       <Extensions>h;</Extensions>
     </Filter>
-    <Filter Include="Src\Core">
-      <UniqueIdentifier>{6ab50440-ff17-4bf7-93d6-48d127b7a884}</UniqueIdentifier>
-      <Extensions>cpp;</Extensions>
-    </Filter>
     <Filter Include="Include\History">
       <UniqueIdentifier>{5c68b530-07f6-4dc9-b153-c9a5218a46db}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\History">
       <UniqueIdentifier>{958037e3-eb19-4fe4-8c14-7f0e812f503d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Events">
-      <UniqueIdentifier>{aa78d2f6-36c9-4e16-9c8c-68350d2b95af}</UniqueIdentifier>
+    <Filter Include="Src\Scenes">
+      <UniqueIdentifier>{b9915ca2-666d-4e18-90ae-51001c739d48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Event">
-      <UniqueIdentifier>{4378026b-7cf5-49bb-b805-a9d7a428ca10}</UniqueIdentifier>
+    <Filter Include="Include\Scenes">
+      <UniqueIdentifier>{f4b3b3cc-b1a8-4f1a-a799-062da2a05dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Core">
+      <UniqueIdentifier>{6ab50440-ff17-4bf7-93d6-48d127b7a884}</UniqueIdentifier>
+      <Extensions>cpp;</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Application.h">
-      <Filter>Include\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\BitA.h">
       <Filter>Include\Core</Filter>
     </ClInclude>
     <ClInclude Include="Include\CharTable.h">
@@ -100,9 +97,6 @@
     <ClInclude Include="Include\ToolsManager.h">
       <Filter>Include\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Vector2D.h">
-      <Filter>Include\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Include\CommandLine.h">
       <Filter>Include\Core</Filter>
     </ClInclude>
@@ -121,21 +115,6 @@
     <ClInclude Include="Include\MarkHistory.h">
       <Filter>Include\History</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Event.h">
-      <Filter>Include\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Keyboard.h">
-      <Filter>Include\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\KeyboardEvent.h">
-      <Filter>Include\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mouse.h">
-      <Filter>Include\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\MouseEvent.h">
-      <Filter>Include\Events</Filter>
-    </ClInclude>
     <ClInclude Include="Include\VectorMarkHistory.h">
       <Filter>Include\History</Filter>
     </ClInclude>
@@ -145,12 +124,15 @@
     <ClInclude Include="Include\Tool_Picker.h">
       <Filter>Include\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Include\SceneApp.h">
+      <Filter>Include\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Canvas.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\application.cpp">
-      <Filter>Src\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\BitA.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\CharTable.cpp">
@@ -198,9 +180,6 @@
     <ClCompile Include="Src\ToolsManager.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Vector2D.cpp">
-      <Filter>Src\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\History.cpp">
       <Filter>Src\Core</Filter>
@@ -217,26 +196,17 @@
     <ClCompile Include="Src\MarkHistory.cpp">
       <Filter>Src\History</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Event.cpp">
-      <Filter>Src\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Keyboard.cpp">
-      <Filter>Src\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\KeyboardEvent.cpp">
-      <Filter>Src\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Mouse.cpp">
-      <Filter>Src\Event</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\MouseEvent.cpp">
-      <Filter>Src\Event</Filter>
-    </ClCompile>
     <ClCompile Include="Src\VectorMarkHistory.cpp">
       <Filter>Src\History</Filter>
     </ClCompile>
     <ClCompile Include="Src\Tool_Bucket.cpp">
       <Filter>Src\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SceneApp.cpp">
+      <Filter>Src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Canvas.cpp">
+      <Filter>Src\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

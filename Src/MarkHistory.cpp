@@ -1,6 +1,6 @@
-#include "..\Include\MarkHistory.h"
+#include "MarkHistory.h"
 
-MarkHistory::MarkHistory(Mark* varr, Mark value)
+MarkHistory::MarkHistory(sc::Mark* varr, sc::Mark value)
 {
 	this->varr = varr;
 	this->value = value;

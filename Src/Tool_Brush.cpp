@@ -25,23 +25,23 @@ Tool_Brush::~Tool_Brush()
 {
 }
 
-void Tool_Brush::input(Event & event)
+void Tool_Brush::input(sc::Event & event)
 {
-	if (event.event_type == Event::Type::Mouse)
+	if (event.event_type == sc::Event::Type::Mouse)
 	{
-		if (event.mouseEvent.isKeyJustPressed(MouseKeys::LeftButton) || 
-			event.mouseEvent.isKeyJustPressed(MouseKeys::RightButton))
+		if (event.mouseEvent.isKeyJustPressed(sc::MouseKeys::LeftButton) || 
+			event.mouseEvent.isKeyJustPressed(sc::MouseKeys::RightButton))
 		{
 			currentHistory = HistoryManager::instance->makeVectorMarkHistory();
 		}
 	}
 }
 
-void Tool_Brush::update()
+void Tool_Brush::update(float delta)
 {
-	auto * app = ToolsManager::toolsManager->app;
+	/*auto * app = ToolsManager::toolsManager->app;
 	if (app->activeFile == nullptr) return;
-	COORD position = Mouse::instance->position;
+	COORD position = sc::Mouse::instance->position;
 	DWORD writen;
 
 	tmp.color = ToolsManager::toolsManager->getPickedColor();
@@ -49,15 +49,15 @@ void Tool_Brush::update()
 
 	if (app->isMouseOnCanvas(position))
 	{
-		if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton)){
-			Mark * tmpMark = &app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x]; // y / x
+		if (sc::Mouse::getInstance()->isKeyPressed(sc::MouseKeys::LeftButton)){
+			sc::Mark * tmpMark = &app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x]; // y / x
 			currentHistory->saveMark(tmpMark, *tmpMark);
 			*tmpMark = tmp; 
 		}
-		else if (Mouse::instance->isKeyPressed(MouseKeys::RightButton)){
-			Mark * tmpMark = &app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x]; // y / x
+		else if (sc::Mouse::getInstance()->isKeyPressed(sc::MouseKeys::RightButton)){
+			sc::Mark * tmpMark = &app->activeFile->marks[position.Y - app->drawingPos.y + app->filePos.y][position.X - app->drawingPos.x + app->filePos.x]; // y / x
 			currentHistory->saveMark(tmpMark, *tmpMark);
 			*tmpMark = cleer_mark;
 		}
-	}
+	}*/
 }

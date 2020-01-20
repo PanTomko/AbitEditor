@@ -124,18 +124,18 @@ void ToolOptionCharTable::draw(HANDLE * consoleOutput)
 	}
 }
 
-void ToolOptionCharTable::input(Event & event)
+void ToolOptionCharTable::input(sc::Event & event)
 {
-	if (event.event_type == Event::Type::Mouse)
+	if (event.event_type == sc::Event::Type::Mouse)
 	{
-		if (event.mouseEvent.isKeyJustRelased(MouseKeys::LeftButton))
+		if (event.mouseEvent.isKeyJustRelased(sc::MouseKeys::LeftButton))
 		{
 			auto & app = ToolsManager::toolsManager->app;
-			wchar_t tmp;
+			wchar_t tmp = L' ';
 
 			if (event.mouseEvent.position.Y == 5 && event.mouseEvent.position.X >= 83 && event.mouseEvent.position.X <= 118)
 			{
-				ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, event.mouseEvent.position, &writen);
+				//ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, event.mouseEvent.position, &writen);
 				if (tmp == L'<') {
 					menu_position--;
 					if (menu_position < 0)
@@ -153,16 +153,16 @@ void ToolOptionCharTable::input(Event & event)
 	}
 }
 
-void ToolOptionCharTable::update()
+void ToolOptionCharTable::update(float delta)
 {
-	if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton))
+	if (sc::Mouse::getInstance()->isKeyPressed(sc::MouseKeys::LeftButton))
 	{
-		COORD mous_position = Mouse::instance->position;
+		COORD mous_position = sc::Mouse::getInstance()->position;
 		auto & app = ToolsManager::toolsManager->app;
-		wchar_t tmp;
+		wchar_t tmp = L' ';
 
 		if (mous_position.X >= 83 && mous_position.X <= 118 && mous_position.Y >= 6 && mous_position.Y <= 26){
-			ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, mous_position, &writen);
+			//ReadConsoleOutputCharacterW(*app->consoleOutput, &tmp, 1, mous_position, &writen);
 			if (tmp != L' ') {
 				ToolsManager::toolsManager->setPickedChar(tmp);
 			}	

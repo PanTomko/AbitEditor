@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include "BitA.h"
 #include "Vector2D.h"
 #include "Event.h"
@@ -68,3 +68,4 @@ public:
 	~Application();
 };
 
+*/

@@ -16,17 +16,17 @@ ToolOptionColor::~ToolOptionColor()
 {
 }
 
-void ToolOptionColor::input(Event & event)
+void ToolOptionColor::input(sc::Event & event)
 {
 
 }
 
-void ToolOptionColor::update()
+void ToolOptionColor::update(float delta)
 {
-	if (Mouse::instance->isKeyPressed(MouseKeys::LeftButton))
+	/*if (sc::Mouse::getInstance()->isKeyPressed(sc::MouseKeys::LeftButton))
 	{
 		// X - 84/116   Y - 5/19
-		COORD mouse = Mouse::instance->position;
+		COORD mouse = sc::Mouse::getInstance()->position;
 		wchar_t tmp;
 		
 		if (mouse.X >= 84 && mouse.X <= 116 && mouse.Y >= 5 && mouse.Y <= 19)
@@ -54,7 +54,7 @@ void ToolOptionColor::update()
 				ToolsManager::toolsManager->setPickedColor(tmp_color);
 			}
 		}
-	}
+	}*/
 }
 
 void ToolOptionColor::draw(HANDLE * consoleOutput)

@@ -1,4 +1,4 @@
-﻿#include "CommandLine.h"
+﻿/*#include "CommandLine.h"
 #include "Application.h"
 
 #include "Command_Save.h"
@@ -158,3 +158,4 @@ void CommandLine::draw( HANDLE & output )
 
 	WriteConsoleOutputAttribute(output, &color, 1, { 3 + static_cast<short>(comandBuffor.length() + pos_fix), 28 }, &writen);
 }
+*/
